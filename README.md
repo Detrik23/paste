@@ -1,17 +1,12 @@
-<p align="center">
-<img src="http://i.imgur.com/mCtrbIN.png">
-</p>
-===================
 
-## Please Note that AimTux-Fuzion Requires an Additional Package for Lua. See Below
+## Please Note that AyyTux Requires an Additional Package for Lua. See Below
 [![Join the chat at https://www.gitter.im/AimTuxOfficial/lobby](https://img.shields.io/gitter/room/TechnologyAdvice/Stardust.svg?style=flat-square)](https://www.gitter.im/AimTuxOfficial/lobby)
 
 Want to chat or play with other AimTux users? Join us on Gitter!
 
-## What is AimTux-Fuzion?
+## What is AyyTux?
 
-A fully featured internal hack for *CounterStrike : Global Offensive* written in C++.
-
+A fully featured internal hack for *CounterStrike : Global Offensive* written in C++. This is my attempt at pasting stuff in. I do not know anything yet, I am just learning. Sorry, LWSS.
 
 ## Compiling
 
@@ -47,14 +42,14 @@ sudo emerge cmake dev-vcs/git gdb libsdl2 mesa (Lua Development Libraries >=5.3)
 
 ===================
 
-#### Download AimTux-Fuzion:
+#### Download AyyTux:
 
 ```bash
-git clone --recursive https://github.com/LWSS/AimTux-Fuzion
+git clone --recursive https://github.com/GreenByteSoftware/AyyTux
 ```
 
 ```bash
-cd AimTux-Fuzion
+cd AyyTux
 ```
 
 ===================
@@ -77,10 +72,10 @@ make -j 4
 
 First of all, make sure CSGO is open, it doesn't matter whether you're in game or not. However, it is not recommended to inject while CSGO is loading into a map. 
 
-Navigate to the directory where AimTux-Fuzion was built if you haven't ready.
+Navigate to the directory where AyyTux was built if you haven't ready.
 
 ```bash
-cd AimTux-Fuzion
+cd AyyTux
 ```
 
 Now, you can inject the hack with the `load` script
@@ -101,7 +96,7 @@ Now, go back into csgo, if you're in the main menu of the game you should see a 
 
 ## Using the hack
 
-Now that AimTux-Fuzion has been injected into the game, press <kbd>Insert</kbd> on your keyboard to open the hack menu (<kbd>ALT</kbd>+<kbd>I</kbd> if you're using a laptop).
+Now that AyyTux has been injected into the game, press <kbd>Insert</kbd> on your keyboard to open the hack menu (<kbd>ALT</kbd>+<kbd>I</kbd> if you're using a laptop).
 
 If you want to change skins, create and load configs or open the player list, you can find those buttons at the top of the screen.
 
@@ -115,11 +110,11 @@ If you wish to unload the hack from the game, you can do so by entering the comm
 
 ## Updating AimTux
 
-We add and improve and fix things almost every week with AimTux-Fuzion( Unlike the Main AimTux ). We don't have a fixed release schedule, we just add things to it when they're ready. Because of this, AimTux-Fuzion will need to update a lot.
+We add and improve and fix things almost every week with AyyTux( Unlike the Main AimTux ). We don't have a fixed release schedule, we just add things to it when they're ready. Because of this, AyyTux will need to update a lot.
 
 If you don't update once a day then we recommend at LEAST update once a week, and ALWAYS update after a CSGO update, just to make sure we fix anything that's broken.
 
-We provide a script included in the AimTux-Fuzion folder that updates AimTux-Fuzion for you. To use it, just run:
+We provide a script included in the AyyTux folder that updates AyyTux for you. To use it, just run:
 
 ```
 ./update
@@ -133,12 +128,12 @@ And it will download and compile without any effort.
 Configs are stored in a hidden directory in your home folder. Specifically 
 
 ```
-~/.config/Fuzion
+~/.config/AyyTux
 ```
 
 Each `config.json` is stored in a seperately named folder (The name you see in-game, in the config window). 
 
-To add a config, create a folder inside of the `~/.config/Fuzion` folder with a name of your choice, and paste the `config.json` inside of that folder.
+To add a config, create a folder inside of the `~/.config/AyyTux` folder with a name of your choice, and paste the `config.json` inside of that folder.
 
 To see hidden folders inside your home folder, press <kbd>CTRL</kbd>+<kbd>H</kbd> when using a file manager.
 
@@ -147,12 +142,12 @@ On your Command line, You can also add the -a flag on ls     `ex: ls -la ~/`
 ## Grenade Configs
 
 ```
-~/.config/FuzionGH
+~/.config/AyyTuxGH
 ```
 
 Each `config.json` is stored in the folder named after them map name.
 
-To add a config, copy the folder containing it to `~/.config/FuzionGH`
+To add a config, copy the folder containing it to `~/.config/AyyTuxGH`
 
 
 ## Screenshots
@@ -163,6 +158,7 @@ To add a config, copy the folder containing it to `~/.config/FuzionGH`
 
 ## Credits
 Special thanks to the Original AimTux project: https://github.com/AimTuxOfficial/AimTux
+And LWSS working on the Original AimTux-Fuzion project.
 
 Special thanks to [@aixxe](http://www.github.com/aixxe/) ([aixxe.net](http://www.aixxe.net)) for the skin changer and with the initial project, as well as helping this project with source code (Available on [@aixxe's](http://www.github.com/aixxe/) github page.)
 

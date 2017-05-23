@@ -7,7 +7,7 @@
 EventListener* eventListener = nullptr;
 
 /* called when the library is loading */
-int __attribute__((constructor)) FuzionInit()
+int __attribute__((constructor)) AyyTuxInit()
 {
 	Interfaces::FindInterfaces();
 	Interfaces::DumpInterfaces();
@@ -105,7 +105,7 @@ int __attribute__((constructor)) FuzionInit()
 	return 0;
 }
 
-void __attribute__((destructor)) FuzionShutdown()
+void __attribute__((destructor)) AyyTuxShutdown()
 {
 	cvar->FindVar("cl_mouseenable")->SetValue(1);
 
