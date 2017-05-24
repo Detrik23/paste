@@ -38,7 +38,7 @@ int __attribute__((constructor)) AyyTuxInit()
 	Hooker::HookSwapWindow();
 	Hooker::HookPollEvent();
 
-	cvar->ConsoleColorPrintf(ColorRGBA(150, 255, 150), ".so Successfully injected.\n");
+	cvar->ConsoleColorPrintf(ColorRGBA(150, 255, 150), "AyyTux was successfully injected.\n");
 
 	ModSupport::OnInit();
 

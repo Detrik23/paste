@@ -45,6 +45,13 @@ void Triggerbot::RenderTab()
 			}
 			ImGui::Columns(1);
 			ImGui::Separator();
+			ImGui::EndChild();
+		}
+	}
+	ImGui::NextColumn();
+	{
+		ImGui::BeginChild("TRIG2", ImVec2(0, 0), true);
+		{
 			ImGui::Text("Minimum Inaccuracy");
 			ImGui::Separator();
 			ImGui::Columns(2, NULL, true);
@@ -58,13 +65,6 @@ void Triggerbot::RenderTab()
 				ImGui::SliderFloat("##TRIGGERMININACC", &Settings::Triggerbot::Inaccuracy::minInaccuracy, 0, 1);
 			}
 			ImGui::Columns(1);
-			ImGui::EndChild();
-		}
-	}
-	ImGui::NextColumn();
-	{
-		ImGui::BeginChild("TRIG2", ImVec2(0, 0), true);
-		{
 			ImGui::Text("Filter");
 			ImGui::Separator();
 			ImGui::Columns(2, NULL, true);
