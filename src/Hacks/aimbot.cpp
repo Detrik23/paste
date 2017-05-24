@@ -49,10 +49,12 @@ float Settings::Aimbot::Smooth::Salting::multiplier = 0.0f;
 bool Settings::Aimbot::AutoSlow::enabled = false;
 bool Settings::Aimbot::AutoSlow::goingToSlow = false;
 bool Settings::Aimbot::Prediction::enabled = false;
+bool Settings::Aimbot::AutoCockRevolver::enabled = false;
 
 bool Aimbot::aimStepInProgress = false;
 std::vector<int64_t> Aimbot::friends = { };
 std::vector<long> killTimes = { 0 }; // the Epoch time from when we kill someone
+float autoCockDifference = 0.0f;
 
 bool shouldAim;
 QAngle AimStepLastAngle;
@@ -70,7 +72,7 @@ std::unordered_map<Hitbox, std::vector<const char*>, Util::IntHash<Hitbox>> hitb
 };
 
 std::unordered_map<ItemDefinitionIndex, AimbotWeapon_t, Util::IntHash<ItemDefinitionIndex>> Settings::Aimbot::weapons = {
-		{ ItemDefinitionIndex::INVALID, { false, false, false, false, false, false, 700, Bone::BONE_HEAD, ButtonCode_t::MOUSE_MIDDLE, false, false, 1.0f, SmoothType::SLOW_END, false, 0.0f, false, 0.0f, true, 180.0f, false, 25.0f, false, false, 2.0f, 2.0f, false, false, false, false, false, false, false, false, 10.0f, false, false, 5.0f } },
+		{ ItemDefinitionIndex::INVALID, { false, false, false, false, false, false, 700, Bone::BONE_HEAD, ButtonCode_t::MOUSE_MIDDLE, false, false, 1.0f, SmoothType::SLOW_END, false, 0.0f, false, 0.0f, true, 180.0f, false, 25.0f, false, false, 2.0f, 2.0f, false, false, false, false, false, false, false, false, false, 10.0f, false, false, 5.0f } },
 };
 
 static QAngle ApplyErrorToAngle(QAngle* angles, float margin)
@@ -440,6 +442,27 @@ void Aimbot::AimStep(C_BasePlayer* player, QAngle& angle, CUserCmd* cmd)
 	angle = AimStepLastAngle;
 }
 
+void Aimbot::AutoCockRevolver(C_BaseCombatWeapon* activeWeapon, C_BasePlayer* localplayer, CUserCmd* cmd)
+{
+	if (!Settings::Aimbot::AutoCockRevolver::enabled)
+		return;
+
+	if (cmd->buttons & IN_RELOAD)
+		return;
+	
+	if (*activeWeapon->GetItemDefinitionIndex() != ItemDefinitionIndex::WEAPON_REVOLVER)
+		return;
+	
+	cmd->buttons |= IN_ATTACK;
+	float postponeFireReady = activeWeapon->GetPostponeFireReadyTime();
+	if (cmd->buttons & IN_ATTACK2)
+		cmd->buttons |= IN_ATTACK;
+	else if (postponeFireReady > 0 && postponeFireReady < globalVars->curtime)
+	{
+		cmd->buttons &= ~IN_ATTACK;
+	}
+}
+
 void Salt(float& smooth)
 {
 	float sine = sin (globalVars->tickcount);
@@ -758,6 +781,7 @@ void Aimbot::CreateMove(CUserCmd* cmd)
 	Aimbot::AutoCrouch(player, cmd);
 	Aimbot::AutoSlow(player, oldForward, oldSideMove, bestDamage, activeWeapon, cmd);
 	Aimbot::AutoPistol(activeWeapon, cmd);
+	Aimbot::AutoCockRevolver(activeWeapon, player, cmd);
 	Aimbot::AutoShoot(player, activeWeapon, cmd);
 	Aimbot::RCS(angle, player, cmd);
 	Aimbot::Smooth(player, angle, cmd);
@@ -841,6 +865,7 @@ void Aimbot::UpdateValues()
 	Settings::Aimbot::RCS::always_on = currentWeaponSetting.rcsAlwaysOn;
 	Settings::Aimbot::RCS::valueX = currentWeaponSetting.rcsAmountX;
 	Settings::Aimbot::RCS::valueY = currentWeaponSetting.rcsAmountY;
+	Settings::Aimbot::AutoCockRevolver::enabled = currentWeaponSetting.autoCockRevolver;
 	Settings::Aimbot::NoShoot::enabled = currentWeaponSetting.noShootEnabled;
 	Settings::Aimbot::IgnoreJump::enabled = currentWeaponSetting.ignoreJumpEnabled;
 	Settings::Aimbot::Smooth::Salting::enabled = currentWeaponSetting.smoothSaltEnabled;
