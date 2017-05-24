@@ -7,12 +7,12 @@ if [ -z "$csgo_pid" ]; then
 fi
 
 if [ ! -d ".git" ]; then
-    /bin/echo "We have detected that you have downloaded aimtux-master.zip from the GitHub website. This is the WRONG way to download AimTux. Please download AimTux with the command 'git clone --recursive https://github.com/AimTuxOfficial/AimTux'"
+    /bin/echo "We have detected that you have downloaded ayytux-master.zip from the GitHub website. This is the WRONG way to download AyyTux. Please download AimTux with the command 'git clone --recursive https://github.com/GreenByteSoftware/AyyTux'"
 fi
 
 #Credit: Aixxe @ aixxe.net
-if grep -q libFuzion.so /proc/$csgo_pid/maps; then
-    /bin/echo -e "\e[33mAimTux-Fuzion is already injected... Aborting...\e[0m"
+if grep -q libAyyTux.so /proc/$csgo_pid/maps; then
+    /bin/echo -e "\e[33mAyyTux is already injected... Aborting...\e[0m"
     exit
 fi
 
@@ -20,7 +20,7 @@ input="$(
 sudo gdb -n -q -batch \
   -ex "attach $csgo_pid" \
   -ex "set \$dlopen = (void*(*)(char*, int)) dlopen" \
-  -ex "call \$dlopen(\"$(pwd)/libFuzion.so\", 1)" \
+  -ex "call \$dlopen(\"$(pwd)/libAyyTux.so\", 1)" \
   -ex "detach" \
   -ex "quit"
 )"

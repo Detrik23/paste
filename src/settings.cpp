@@ -210,6 +210,8 @@ void Settings::LoadDefaultsOrSave(std::string path)
 	settings["Triggerbot"]["Filters"]["stomach"] = Settings::Triggerbot::Filters::stomach;
 	settings["Triggerbot"]["Filters"]["arms"] = Settings::Triggerbot::Filters::arms;
 	settings["Triggerbot"]["Filters"]["legs"] = Settings::Triggerbot::Filters::legs;
+	settings["Triggerbot"]["Inaccuracy"]["enabled"] = Settings::Triggerbot::Inaccuracy::enabled;
+	settings["Triggerbot"]["Inaccuracy"]["minInaccuracy"] = Settings::Triggerbot::Inaccuracy::minInaccuracy;
 	settings["Triggerbot"]["RandomDelay"]["enabled"] = Settings::Triggerbot::RandomDelay::enabled;
 	settings["Triggerbot"]["RandomDelay"]["lowBound"] = Settings::Triggerbot::RandomDelay::lowBound;
 	settings["Triggerbot"]["RandomDelay"]["highBound"] = Settings::Triggerbot::RandomDelay::highBound;
@@ -611,6 +613,8 @@ void Settings::LoadConfig(std::string path)
 	GetVal(settings["Triggerbot"]["Filters"]["stomach"], &Settings::Triggerbot::Filters::stomach);
 	GetVal(settings["Triggerbot"]["Filters"]["arms"], &Settings::Triggerbot::Filters::arms);
 	GetVal(settings["Triggerbot"]["Filters"]["legs"], &Settings::Triggerbot::Filters::legs);
+	GetVal(settings["Triggerbot"]["Inaccuracy"]["enabled"], &Settings::Triggerbot::Inaccuracy::enabled);
+	GetVal(settings["Triggerbot"]["Inaccuracy"]["minInaccuracy"], &Settings::Triggerbot::Inaccuracy::minInaccuracy);
 	GetVal(settings["Triggerbot"]["RandomDelay"]["enabled"], &Settings::Triggerbot::RandomDelay::enabled);
 	GetVal(settings["Triggerbot"]["RandomDelay"]["lowBound"], &Settings::Triggerbot::RandomDelay::lowBound);
 	GetVal(settings["Triggerbot"]["RandomDelay"]["highBound"], &Settings::Triggerbot::RandomDelay::highBound);

@@ -628,6 +628,8 @@ void Aimbot::ShootCheck(C_BaseCombatWeapon* activeWeapon, CUserCmd* cmd)
 
 void Aimbot::NoShoot(C_BaseCombatWeapon* activeWeapon, C_BasePlayer* player, CUserCmd* cmd)
 {
+	if (activeWeapon->GetSpread() + activeWeapon->GetInaccuracy() < 0.03f)
+		return;
 	if (player && Settings::Aimbot::NoShoot::enabled)
 	{
 		if (*activeWeapon->GetItemDefinitionIndex() == ItemDefinitionIndex::WEAPON_C4)

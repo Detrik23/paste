@@ -45,6 +45,19 @@ void Triggerbot::RenderTab()
 			}
 			ImGui::Columns(1);
 			ImGui::Separator();
+			ImGui::Text("Minimum Inaccuracy");
+			ImGui::Separator();
+			ImGui::Columns(2, NULL, true);
+			{
+				ImGui::Checkbox("Enabled", &Settings::Triggerbot::Inaccuracy::enabled);
+				SetTooltip("Adds option to ignore the Triggerbot above certain inaccuracy");
+			}
+			ImGui::NextColumn();
+			{
+				ImGui::Text("Minimum Value");
+				ImGui::SliderFloat("##TRIGGERMININACC", &Settings::Triggerbot::Inaccuracy::minInaccuracy, 0, 1);
+			}
+			ImGui::Columns(1);
 			ImGui::EndChild();
 		}
 	}

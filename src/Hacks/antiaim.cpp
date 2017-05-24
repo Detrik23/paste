@@ -463,8 +463,23 @@ void DoAntiAimY(QAngle& angle, int command_number, bool bFlip, bool& clamp)
 			factor =  360.0 / M_PHI;
 			angle.y = fmodf(globalVars->curtime * factor, 360.0);
 			break;
+		case AntiAimType_Y::SPIN_RANDOM:
+			factor = 360.0 / M_PHI;
+			factor *= rand() % 25;
+			angle.y = fmodf(globalVars->curtime * factor, 360.0);
+			break;
 		case AntiAimType_Y::JITTER:
 			yFlip ? angle.y -= 90.0f : angle.y -= 270.0f;
+			break;
+		case AntiAimType_Y::RANDOMBACKJITTER:
+			angle.y -= 180;
+			random = rand() % 100;
+			maxJitter = rand() % (85 - 70 + 1) + 70;
+			temp = maxJitter - (rand() % maxJitter);
+			if (random < 35 + (rand() % 15))
+				angle.y -= temp;
+			else if (random < 85 + (rand() % 15 ))
+				angle.y += temp;
 			break;
 		case AntiAimType_Y::BACKJITTER:
 			angle.y -= 180;
@@ -513,6 +528,9 @@ void DoAntiAimY(QAngle& angle, int command_number, bool bFlip, bool& clamp)
 			break;
 		case AntiAimType_Y::LUA2:
 			angle.y = LuaScriptY2( lastAngleY2, angle.y );
+			break;
+		case AntiAimType_Y::CASUALAA:
+			yFlip ? angle.y -= 35.0f : angle.y += 35.0f;
 			break;
 		case AntiAimType_Y::LISP:
 			clamp = false;
@@ -565,9 +583,6 @@ void DoAntiAimY(QAngle& angle, int command_number, bool bFlip, bool& clamp)
 			clamp = false;
 			factor = (globalVars->curtime * 5000.0f);
 			angle.y = factor + 36000000.0f;
-			break;
-		case AntiAimType_Y::CASUALAA:
-			yFlip ? angle.y -= 35.0f : angle.y += 35.0f;
 			break;
 		case AntiAimType_Y::LUA_UNCLAMPED:
 			clamp = false;

@@ -52,6 +52,8 @@ enum class AutostrafeType : int
 enum class AntiAimType_Y : int
 {
 	SPIN_SLOW,
+	SPIN_RANDOM,
+	RANDOMBACKJITTER,
 	SPIN_FAST,
 	JITTER,
 	BACKJITTER,
@@ -467,6 +469,12 @@ namespace Settings
 			extern bool stomach;
 			extern bool arms;
 			extern bool legs;
+		}
+
+		namespace Inaccuracy
+		{
+			extern bool enabled;
+			extern float minInaccuracy;
 		}
 
 		namespace RandomDelay

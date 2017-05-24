@@ -1299,7 +1299,7 @@ void ESP::DrawSpread()
 	int width, height;
 	engine->GetScreenSize(width, height);
 
-	float cone = activeWeapon->GetSpread() + activeWeapon->GetInaccuracy();
+	float cone = activeWeapon->GetInaccuracy();
 	if( cone > 0.0f ){
 		float radius = ( cone * height ) / 1.5f;
 		Draw::Rectangle(Vector2D(((width/2)-radius), (height/2)-radius+1), Vector2D( (width/2)+radius+1, (height/2)+radius+2), Color::FromImColor(Settings::ESP::FOVCrosshair::color.Color()));
