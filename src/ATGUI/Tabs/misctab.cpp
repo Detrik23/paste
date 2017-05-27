@@ -410,7 +410,9 @@ void Misc::RenderTab()
 				ImGui::Checkbox("Auto Accept", &Settings::AutoAccept::enabled);
 				SetTooltip("Auto accept games when in MM queue");
 				ImGui::Checkbox("AirStuck", &Settings::Airstuck::enabled);
-				SetTooltip("Stops tickrate so you freeze in place");
+				SetTooltip("Stops tickrate so you freeze in place, or move slow");
+				ImGui::Checkbox("No Key Stuck", &Settings::Airstuck::alwaysOn);
+				SetTooltip("Airstuck without pressing a key");
 				ImGui::Checkbox("Autoblock", &Settings::Autoblock::enabled);
 				SetTooltip("Allows you to block players from moving forwards by standing in front of them and mirroring their moves - great for griefing");
 				ImGui::Checkbox("Jump Throw", &Settings::JumpThrow::enabled);
@@ -432,6 +434,7 @@ void Misc::RenderTab()
 				ImGui::Checkbox("Screenshot Cleaner", &Settings::ScreenshotCleaner::enabled);
 				SetTooltip("Prevents Cheat visuals from appearing in screenshots taken");
 				UI::KeyBindButton(&Settings::Airstuck::key);
+				ImGui::SliderInt("##AIRSTUCKSPEED", &Settings::Airstuck::moveSpeed, 0, 10, "Speed: %0.f");
 				UI::KeyBindButton(&Settings::Autoblock::key);
 				UI::KeyBindButton(&Settings::JumpThrow::key);
 				ImGui::Checkbox("Silent Defuse", &Settings::AutoDefuse::silent);

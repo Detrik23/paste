@@ -47,6 +47,12 @@ struct ColorRGBA
 class ConVar
 {
 public:
+	char* GetString()
+	{
+		typedef char* (* oGetString)(void*);
+		return getvfunc<oGetString>(this, 14)(this);
+	}
+
 	float GetFloat()
 	{
 		typedef float (* oGetFloat)(void*);

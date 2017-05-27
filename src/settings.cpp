@@ -147,6 +147,7 @@ void Settings::LoadDefaultsOrSave(std::string path)
 		#define weaponSetting settings["Aimbot"]["weapons"][Util::Items::GetItemName((enum ItemDefinitionIndex) i.first)]
 		weaponSetting["Enabled"] = i.second.enabled;
 		weaponSetting["Silent"] = i.second.silent;
+		weaponSetting["pSilent"] = i.second.pSilent;
 		weaponSetting["Friendly"] = i.second.friendly;
 		weaponSetting["ClosestBone"] = i.second.closestBone;
 		weaponSetting["engageLock"] = i.second.engageLock;
@@ -397,6 +398,8 @@ void Settings::LoadDefaultsOrSave(std::string path)
 	settings["FOVChanger"]["ignore_scope"] = Settings::FOVChanger::ignoreScope;
 
 	settings["Airstuck"]["enabled"] = Settings::Airstuck::enabled;
+	settings["Airstuck"]["alwaysOn"] = Settings::Airstuck::alwaysOn;
+	settings["Airstuck"]["moveSpeed"] = Settings::Airstuck::moveSpeed;
 	settings["Airstuck"]["key"] = Util::GetButtonName(Settings::Airstuck::key);
 
 	settings["SkinChanger"]["Skins"]["enabled"] = Settings::Skinchanger::Skins::enabled;
@@ -449,6 +452,9 @@ void Settings::LoadDefaultsOrSave(std::string path)
 	settings["FakeLag"]["adaptive"] = Settings::FakeLag::adaptive;
 
 	settings["AutoAccept"]["enabled"] = Settings::AutoAccept::enabled;
+
+	settings["SkyChanger"]["enabled"] = Settings::SkyChanger::enabled;
+	settings["SkyChanger"]["skyName"] = Settings::SkyChanger::skyName;
 
 	settings["NoSky"]["enabled"] = Settings::NoSky::enabled;
 	LoadColor(settings["NoSky"]["color"], Settings::NoSky::color);
@@ -526,7 +532,7 @@ void Settings::LoadConfig(std::string path)
 	Fonts::SetupFonts();
 
 	Settings::Aimbot::weapons = {
-			{ ItemDefinitionIndex::INVALID, { false, false, false, false, false, false, 700, Bone::BONE_HEAD, ButtonCode_t::MOUSE_MIDDLE, false, false, 1.0f, SmoothType::SLOW_END, false, 0.0f, false, 0.0f, true, 180.0f, false, 25.0f, false, false, 2.0f, 2.0f, false, false, false, false, false, false, false, false, false, 10.0f, false, false, 5.0f } },
+			{ ItemDefinitionIndex::INVALID, { false, false, false, false, false, false, false, 700, Bone::BONE_HEAD, ButtonCode_t::MOUSE_MIDDLE, false, false, 1.0f, SmoothType::SLOW_END, false, 0.0f, false, 0.0f, true, 180.0f, false, 25.0f, false, false, 2.0f, 2.0f, false, false, false, false, false, false, false, false, false, 10.0f, false, false, 5.0f } },
 	};
 
 	for (Json::ValueIterator itr = settings["Aimbot"]["weapons"].begin(); itr != settings["Aimbot"]["weapons"].end(); itr++)
@@ -552,6 +558,7 @@ void Settings::LoadConfig(std::string path)
 		AimbotWeapon_t weapon = {
 				weaponSetting["Enabled"].asBool(),
 				weaponSetting["Silent"].asBool(),
+				weaponSetting["pSilent"].asBool(),
 				weaponSetting["Friendly"].asBool(),
 				weaponSetting["ClosestBone"].asBool(),
 				weaponSetting["engageLock"].asBool(),
@@ -803,6 +810,8 @@ void Settings::LoadConfig(std::string path)
 	GetVal(settings["FOVChanger"]["ignore_scope"], &Settings::FOVChanger::ignoreScope);
 
 	GetVal(settings["Airstuck"]["enabled"], &Settings::Airstuck::enabled);
+	GetVal(settings["Airstuck"]["alwaysOn"], &Settings::Airstuck::alwaysOn);
+	GetVal(settings["Airstuck"]["moveSpeed"], &Settings::Airstuck::moveSpeed);
 	GetButtonCode(settings["Airstuck"]["key"], &Settings::Airstuck::key);
 
 	Settings::Skinchanger::Skins::enabled = false;
@@ -908,6 +917,9 @@ void Settings::LoadConfig(std::string path)
 	GetVal(settings["FakeLag"]["adaptive"], &Settings::FakeLag::adaptive);
 
 	GetVal(settings["AutoAccept"]["enabled"], &Settings::AutoAccept::enabled);
+	
+	GetVal(settings["SkyChager"]["enabled"], &Settings::SkyChanger::enabled);
+	GetVal(settings["SkyChanger"]["skyName"], Settings::SkyChanger::skyName);
 
 	GetVal(settings["NoSky"]["enabled"], &Settings::NoSky::enabled);
 	GetVal(settings["NoSky"]["color"], &Settings::NoSky::color);

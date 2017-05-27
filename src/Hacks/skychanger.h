@@ -1,12 +1,12 @@
 #pragma once
 
-#include <climits>
 #include "../settings.h"
 #include "../SDK/SDK.h"
 #include "../interfaces.h"
 
-namespace Airstuck
+namespace Skychanger
 {
-	void CreateMove(CUserCmd* cmd);
+	void SetSky(const char* skyname);	
 }
 
+extern LoadSkyFn LoadSky;

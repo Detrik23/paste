@@ -1,5 +1,7 @@
 #include "visualstab.h"
 
+static char skyName[127] = "";
+
 void Visuals::RenderTab()
 {
 	const char* BoxTypes[] = { "Flat 2D", "Frame 2D", "Box 3D", "Hitboxes" };
@@ -202,6 +204,8 @@ void Visuals::RenderTab()
 				SetTooltip("Apply chams to weapons");
 				ImGui::Checkbox("No Sky", &Settings::NoSky::enabled);
 				SetTooltip("Allows for the skybox to be colored or disabled");
+				ImGui::Checkbox("Sky Changer", &Settings::SkyChanger::enabled);
+				SetTooltip("Allows for the skybox to be changed");
 				ImGui::Checkbox("No Smoke", &Settings::NoSmoke::enabled);
 				SetTooltip("Disables smoke rendering");
 			}
@@ -219,6 +223,9 @@ void Visuals::RenderTab()
 				SetTooltip("Makes wall textures transparent");
 				ImGui::Checkbox("No Scope Border", &Settings::NoScopeBorder::enabled);
 				SetTooltip("Disables black scope silhouette");
+				if (ImGui::InputText("##SKYNAME", skyName, 127, ImGuiInputTextFlags_EnterReturnsTrue))
+					Skychanger::SetSky(std::string(skyName).c_str());
+				//SetTooltip("Disables black scope silhouette");
 				ImGui::Checkbox("Autowall Debug", &Settings::ESP::AutoWall::debugView);
 				SetTooltip("Draw Possible Autowall Damage on bones\nenable Visuals and Check Filter Enemies");
 			}

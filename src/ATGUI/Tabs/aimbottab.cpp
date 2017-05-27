@@ -3,6 +3,7 @@
 static ItemDefinitionIndex currentWeapon = ItemDefinitionIndex::INVALID;
 static bool enabled = false;
 static bool silent = false;
+static bool pSilent = false;
 static bool friendly = false;
 static bool closestBone = false;
 static bool desiredBones[] = {true, true, true, true, true, true, true, // center mass
@@ -55,6 +56,7 @@ void UI::ReloadWeaponSettings()
 
 	enabled = Settings::Aimbot::weapons.at(index).enabled;
 	silent = Settings::Aimbot::weapons.at(index).silent;
+	pSilent = Settings::Aimbot::weapons.at(index).pSilent;
 	friendly = Settings::Aimbot::weapons.at(index).friendly;
 	closestBone = Settings::Aimbot::weapons.at(index).closestBone;
 	engageLock = Settings::Aimbot::weapons.at(index).engageLock;
@@ -104,7 +106,7 @@ void UI::UpdateWeaponSettings()
 		Settings::Aimbot::weapons[currentWeapon] = AimbotWeapon_t();
 
 	AimbotWeapon_t settings = {
-			enabled, silent, friendly, closestBone, engageLock, engageLockTR, engageLockTTR, bone, aimkey, aimkeyOnly,
+			enabled, silent, pSilent, friendly, closestBone, engageLock, engageLockTR, engageLockTTR, bone, aimkey, aimkeyOnly,
 			smoothEnabled, smoothValue, smoothType, smoothSaltEnabled, smoothSaltMultiplier,
 			errorMarginEnabled, errorMarginValue,
 			autoAimEnabled, autoAimValue, aimStepEnabled, aimStepValue,
@@ -450,6 +452,9 @@ void Aimbot::RenderTab()
 				if (ImGui::Checkbox("Silent Aim", &silent))
 					UI::UpdateWeaponSettings();
 				SetTooltip("Prevents the camera from locking to an enemy, doesn't work for demos");
+				if (ImGui::Checkbox("pSilent", &pSilent))
+					UI::UpdateWeaponSettings();
+				SetTooltip("Works only on community servers. Prevents the camera from locking to an enemy.");
 				if (ImGui::Checkbox("Smoke Check", &smokeCheck))
 					UI::UpdateWeaponSettings();
 				SetTooltip("Ignore players that are blocked by smoke");

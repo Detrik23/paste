@@ -27,6 +27,7 @@ uintptr_t oPollEvent;
 uintptr_t* polleventJumpAddress = nullptr;
 
 MsgFunc_ServerRankRevealAllFn MsgFunc_ServerRankRevealAll;
+LoadSkyFn LoadSky;
 SendClanTagFn SendClanTag;
 IsReadyCallbackFn IsReadyCallback;
 
@@ -146,7 +147,7 @@ void Hooker::FindCInput()
 
 	input = **reinterpret_cast<CInput***>(GetAbsoluteAddress(IN_ActivateMouse, 3, 7));
 }
-
+	
 void Hooker::FindGlowManager()
 {
 	uintptr_t instruction_addr = PatternFinder::FindPatternInModule("client_client.so", (unsigned char*) GLOWOBJECT_SIGNATURE, GLOWOBJECT_MASK);
@@ -173,6 +174,16 @@ void Hooker::FindRankReveal()
 	uintptr_t func_address = PatternFinder::FindPatternInModule("client_client.so", (unsigned char*) MSGFUNC_SERVERRANKREVEALALL_SIGNATURE, MSGFUNC_SERVERRANKREVEALALL_MASK);
 
 	MsgFunc_ServerRankRevealAll = reinterpret_cast<MsgFunc_ServerRankRevealAllFn>(func_address);
+}
+
+void Hooker::FindLoadSky()
+{
+	//uintptr_t func_address;
+	//size_t memSize;
+	//Hooker::GetLibraryInformation("client_client.so", &func_address, &memSize) + 0x3F8900;
+	uintptr_t func_address = PatternFinder::FindPatternInModule("engine_client.so", (unsigned char*) LOADSKY_SIGNATURE, LOADSKY_MASK);
+	
+	LoadSky = reinterpret_cast<LoadSkyFn>(func_address);
 }
 
 void Hooker::FindSendClanTag()

@@ -22,6 +22,7 @@ int __attribute__((constructor)) AyyTuxInit()
 	Hooker::FindPlayerResource();
 	Hooker::FindGameRules();
 	Hooker::FindRankReveal();
+	Hooker::FindLoadSky();
 	Hooker::FindSendClanTag();
 	Hooker::FindSendPacket();
 	Hooker::FindPrediction();

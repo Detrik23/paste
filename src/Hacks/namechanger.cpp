@@ -87,7 +87,7 @@ void NameChanger::BeginFrame(float frameTime)
 		switch (NameChanger::type)
 		{
 			case NC_Type::NC_NORMAL:
-				SetName(Util::PadStringRight("\230realnigga.club", strlen("\230realnigga.club") + RandomInt(10, 50)));
+				SetName(Util::PadStringRight("\230ayytux.ga", strlen("\230ayytux.ga") + RandomInt(10, 50)));
 				break;
 			case NC_Type::NC_RAINBOW:
 				SetName(Util::PadStringRight(Rainbowify(origName), origName.size() + RandomInt(10, 50)));
@@ -102,7 +102,7 @@ void NameChanger::BeginFrame(float frameTime)
 		return;
 	}
 
-	SetName(Util::PadStringRight("realnigga.club", strlen("realnigga.club") + changes));
+	SetName(Util::PadStringRight("ayytux.ga", strlen("ayytux.ga") + changes));
 }
 
 void NameChanger::SetName(const char* name)
