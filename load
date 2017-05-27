@@ -10,6 +10,11 @@ if [ ! -d ".git" ]; then
     /bin/echo "We have detected that you have downloaded ayytux-master.zip from the GitHub website. This is the WRONG way to download AyyTux. Please download AimTux with the command 'git clone --recursive https://github.com/GreenByteSoftware/AyyTux'"
 fi
 
+# pBypass paste for crash dumps being sent
+sudo rm -rf /tmp/dumps # Remove if it's there
+sudo mkdir /tmp/dumps # Make it as root
+sudo chmod 000 /tmp/dumps # No permissions
+
 #Credit: Aixxe @ aixxe.net
 if grep -q libAyyTux.so /proc/$csgo_pid/maps; then
     /bin/echo -e "\e[33mAyyTux is already injected... Aborting...\e[0m"
