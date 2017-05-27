@@ -313,7 +313,39 @@ inline float LuaScriptY(const float lastAngle, const float angle)
 {
 	if( Settings::AntiAim::Lua::debugMode ){
 		if( strcmp(Settings::AntiAim::Lua::scriptY, luaLastY) != 0 ){
-			int load_status = luaL_loadbuffer(LuaY, Settings::AntiAim::Lua::scriptY, strlen(Settings::AntiAim::Lua::scriptY), Settings::AntiAim::Lua::scriptY);
+			int load_status = luaL_loadbuffer(LuaY, Settings::AntiAim::Lua::scriptY, strl		case AntiAimType_X::FAKEPITCH:
+		{	
+			static int ChokedPackets = -1;
+			ChokedPackets++;
+			if (ChokedPackets < 1)
+			{
+				CreateMove::sendPacket = false;		case AntiAimType_X::FAKEPITCH:
+		{	
+			static int ChokedPackets = -1;
+			ChokedPackets++;
+			if (ChokedPackets < 1)
+			{
+				CreateMove::sendPacket = false;
+				angle.x = 89;
+			}
+			else
+			{
+				CreateMove::sendPacket = true;
+				angle.x = 51;
+				ChokedPackets = -1;
+			}
+		}
+			break;
+				angle.x = 89;
+			}
+			else
+			{
+				CreateMove::sendPacket = true;
+				angle.x = 51;
+				ChokedPackets = -1;
+			}
+		}
+			break;en(Settings::AntiAim::Lua::scriptY), Settings::AntiAim::Lua::scriptY);
 			if( load_status != 0 ){
 				cvar->ConsoleDPrintf("LUA: Error Loading Buffer\n");
 				LuaError(load_status, LuaY);
@@ -468,6 +500,10 @@ void DoAntiAimY(QAngle& angle, int command_number, bool bFlip, bool& clamp)
 			factor *= rand() % 25;
 			angle.y = fmodf(globalVars->curtime * factor, 360.0);
 			break;
+		case AntiAimType_Y::LBYSPIN:
+			factor =  360.0 / M_PHI;
+			angle.y = *((C_BasePlayer*)entityList->GetClientEntity(engine->GetLocalPlayer()))->GetLowerBodyYawTarget() + fmodf(globalVars->curtime * factor, 360.0);
+			break;
 		case AntiAimType_Y::JITTER:
 			yFlip ? angle.y -= 90.0f : angle.y -= 270.0f;
 			break;
@@ -490,6 +526,21 @@ void DoAntiAimY(QAngle& angle, int command_number, bool bFlip, bool& clamp)
 				angle.y -= temp;
 			else if (random < 85 + (rand() % 15 ))
 				angle.y += temp;
+			break;
+		case AntiAimType_Y::TURBOJITTER:
+		{
+			static bool turbo = true;
+			if (turbo)
+			{
+				angle.y -= 90.0f;
+				turbo = !turbo;
+			}
+			else
+			{
+				angle.y += 90.0f;
+				turbo = !turbo;
+		  	}
+		}
 			break;
 		case AntiAimType_Y::SIDE:
 			yFlip ? angle.y += 90.f : angle.y -= 90.0f;
@@ -651,11 +702,30 @@ void DoAntiAimX(QAngle& angle, bool bFlip, bool& clamp)
 		case AntiAimType_X::FRONT:
 			angle.x = 0.0f;
 			break;
+		case AntiAimType_X::FAKEPITCH:
+		{	
+			static int ChokedPackets = -1;
+			ChokedPackets++;
+			if (ChokedPackets < 1)
+			{
+				CreateMove::sendPacket = false;
+				angle.x = 89;
+			}
+			else
+			{
+				CreateMove::sendPacket = true;
+				angle.x = 51;
+				ChokedPackets = -1;
+			}
+		}
+			break;
 		case AntiAimType_X::STATIC_UP_FAKE:
-			angle.x = bFlip ? 89.0f : -89.0f;
+			clamp = false;
+			angle.x = 991.0f;
 			break;
 		case AntiAimType_X::STATIC_DOWN_FAKE:
-			angle.x = bFlip ? -89.0f : 89.0f;
+			clamp = false;
+			angle.x -= 179.9995;
 			break;
 		case AntiAimType_X::LUA1:
 			angle.x = LuaScriptX( lastAngleX, angle.x );
