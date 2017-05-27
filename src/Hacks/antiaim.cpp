@@ -313,39 +313,7 @@ inline float LuaScriptY(const float lastAngle, const float angle)
 {
 	if( Settings::AntiAim::Lua::debugMode ){
 		if( strcmp(Settings::AntiAim::Lua::scriptY, luaLastY) != 0 ){
-			int load_status = luaL_loadbuffer(LuaY, Settings::AntiAim::Lua::scriptY, strl		case AntiAimType_X::FAKEPITCH:
-		{	
-			static int ChokedPackets = -1;
-			ChokedPackets++;
-			if (ChokedPackets < 1)
-			{
-				CreateMove::sendPacket = false;		case AntiAimType_X::FAKEPITCH:
-		{	
-			static int ChokedPackets = -1;
-			ChokedPackets++;
-			if (ChokedPackets < 1)
-			{
-				CreateMove::sendPacket = false;
-				angle.x = 89;
-			}
-			else
-			{
-				CreateMove::sendPacket = true;
-				angle.x = 51;
-				ChokedPackets = -1;
-			}
-		}
-			break;
-				angle.x = 89;
-			}
-			else
-			{
-				CreateMove::sendPacket = true;
-				angle.x = 51;
-				ChokedPackets = -1;
-			}
-		}
-			break;en(Settings::AntiAim::Lua::scriptY), Settings::AntiAim::Lua::scriptY);
+			int load_status = luaL_loadbuffer(LuaY, Settings::AntiAim::Lua::scriptY, strlen(Settings::AntiAim::Lua::scriptY), Settings::AntiAim::Lua::scriptY);
 			if( load_status != 0 ){
 				cvar->ConsoleDPrintf("LUA: Error Loading Buffer\n");
 				LuaError(load_status, LuaY);
