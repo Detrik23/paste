@@ -6,8 +6,10 @@ ImVec2 QuickMenu::windowSize = ImVec2(260, 260);
 
 void QuickMenu::RenderWindow()
 {
-	if (!QuickMenu::showWindow)
+	if (!QuickMenu::showWindow) {
+		QuickMenu::windowPos = ImGui::GetIO().MousePos;
 		return;
+	}
 
 	ImGui::SetNextWindowPos(ImVec2(QuickMenu::windowPos.x - (QuickMenu::windowSize.x/2), QuickMenu::windowPos.y - (QuickMenu::windowSize.y/2)), ImGuiSetCond_Always);
 	ImGui::SetNextWindowSize(QuickMenu::windowSize, ImGuiSetCond_Always);
