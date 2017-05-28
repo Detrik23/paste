@@ -1,6 +1,9 @@
 #include "atgui.h"
 
 bool UI::isVisible = false;
+bool Settings::Watermark::enabled = true;
+char* Settings::Watermark::text = strdup("AyyTux");
+ColorVar Settings::Watermark::color = ImColor(255, 255, 255, 255);
 
 bool Settings::ScreenshotCleaner::enabled = false;
 
@@ -60,7 +63,8 @@ void UI::SwapWindow()
 	if (engine->IsInGame())
 		return;
 
-	Draw::ImDrawText(ImVec2(4.f, 4.f), ImColor(255, 255, 255, 255), "AyyTux", NULL, 0.0f, NULL, ImFontFlags_Shadow);
+	if (Settings::Watermark::enabled)
+		Draw::ImDrawText(ImVec2(4.f, 4.f), Settings::Watermark::color.Color(), Settings::Watermark::text, NULL, 0.0f, NULL, ImFontFlags_Outline);
 }
 
 void UI::SetVisible(bool visible)

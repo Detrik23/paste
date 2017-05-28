@@ -419,6 +419,8 @@ void Misc::RenderTab()
 				SetTooltip("Hold to prime grenade, release to perform perfect jump throw. Good for executing map smokes.");
 				ImGui::Checkbox("Auto Defuse", &Settings::AutoDefuse::enabled);
 				SetTooltip("Will automatically defuse the bomb with 0.5 seconds remaining - starts at 5.5 seconds until explosion with kit and 10.5 without");
+				ImGui::Checkbox("Watermark", &Settings::Watermark::enabled);
+				SetTooltip("Enable/Disable the Watermark");
 				ImGui::Checkbox("Sniper Crosshair", &Settings::SniperCrosshair::enabled);
 				SetTooltip("Enables the crosshair with sniper rifles");
 				ImGui::Checkbox("Disable post-processing", &Settings::DisablePostProcessing::enabled);
@@ -439,6 +441,17 @@ void Misc::RenderTab()
 				UI::KeyBindButton(&Settings::JumpThrow::key);
 				ImGui::Checkbox("Silent Defuse", &Settings::AutoDefuse::silent);
 				SetTooltip("Will defuse the bomb with no need to look at it");
+				if (ImGui::Button("Custom###WMCUSTOM"))
+					ImGui::OpenPopup("customwm");
+
+				ImGui::SetNextWindowSize(ImVec2(565, 40), ImGuiSetCond_Always);
+				if (ImGui::BeginPopup("customwm"))
+				{
+					ImGui::PushItemWidth(550);
+						ImGui::InputText("", Settings::Watermark::text, 127);
+					ImGui::PopItemWidth();
+					ImGui::EndPopup();
+				}
 			}
 			ImGui::Columns(1);
 			ImGui::Separator();
