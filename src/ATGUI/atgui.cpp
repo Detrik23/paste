@@ -46,7 +46,6 @@ void SetupMainMenuBar()
 
 void UI::QuickToggle(bool enable)
 {
-	QuickMenu::windowPos = ImGui::GetIO().MousePos;
 	QuickMenu::showWindow = enable;
 }
 
