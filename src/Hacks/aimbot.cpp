@@ -27,6 +27,8 @@ bool Settings::Aimbot::AutoAim::desiredBones[] = {true, true, true, true, true, 
 bool Settings::Aimbot::AutoAim::engageLock = false;
 bool Settings::Aimbot::AutoAim::engageLockTR = false; // engage lock Target Reacquisition ( re-target after getting a kill when spraying ).
 int Settings::Aimbot::AutoAim::engageLockTTR = 700; // Time to Target Reacquisition in ms
+bool Settings::Aimbot::SpreadLimit::enabled = false;
+float Settings::Aimbot::SpreadLimit::value = 0.1f;
 bool Settings::Aimbot::AutoWall::enabled = false;
 float Settings::Aimbot::AutoWall::value = 10.0f;
 bool Settings::Aimbot::AutoWall::bones[] = { true, false, false, false, false, false };
@@ -73,7 +75,7 @@ std::unordered_map<Hitbox, std::vector<const char*>, Util::IntHash<Hitbox>> hitb
 };
 
 std::unordered_map<ItemDefinitionIndex, AimbotWeapon_t, Util::IntHash<ItemDefinitionIndex>> Settings::Aimbot::weapons = {
-		{ ItemDefinitionIndex::INVALID, { false, false, false, false, false, false, false, 700, Bone::BONE_HEAD, ButtonCode_t::MOUSE_MIDDLE, false, false, 1.0f, SmoothType::SLOW_END, false, 0.0f, false, 0.0f, true, 180.0f, false, 25.0f, false, false, 2.0f, 2.0f, false, false, false, false, false, false, false, false, false, 10.0f, false, false, 5.0f } },
+		{ ItemDefinitionIndex::INVALID, { false, false, false, false, false, false, false, 700, Bone::BONE_HEAD, ButtonCode_t::MOUSE_MIDDLE, false, false, 1.0f, SmoothType::SLOW_END, false, 0.0f, false, 0.0f, true, 180.0f, false, 25.0f, false, false, 2.0f, 2.0f, false, false, false, false, false, false, false, false, false, 0.1f, false, 10.0f, false, false, 5.0f } },
 };
 
 static QAngle ApplyErrorToAngle(QAngle* angles, float margin)
@@ -589,6 +591,9 @@ void Aimbot::AutoShoot(C_BasePlayer* player, C_BaseCombatWeapon* activeWeapon, C
 	if (!Settings::Aimbot::AutoShoot::enabled)
 		return;
 
+	if( Settings::Aimbot::SpreadLimit::enabled && ((activeWeapon->GetSpread() + activeWeapon->GetInaccuracy()) > Settings::Aimbot::SpreadLimit::value))
+		return;
+
 	if (Settings::Aimbot::AimStep::enabled && Aimbot::aimStepInProgress)
 		return;
 
@@ -881,6 +886,8 @@ void Aimbot::UpdateValues()
 	Settings::Aimbot::Smooth::Salting::multiplier = currentWeaponSetting.smoothSaltMultiplier;
 	Settings::Aimbot::SmokeCheck::enabled = currentWeaponSetting.smokeCheck;
 	Settings::Aimbot::FlashCheck::enabled = currentWeaponSetting.flashCheck;
+	Settings::Aimbot::SpreadLimit::enabled = currentWeaponSetting.spreadLimitEnabled;
+	Settings::Aimbot::SpreadLimit::value = currentWeaponSetting.spreadLimit;
 	Settings::Aimbot::AutoWall::enabled = currentWeaponSetting.autoWallEnabled;
 	Settings::Aimbot::AutoWall::value = currentWeaponSetting.autoWallValue;
 	Settings::Aimbot::AutoSlow::enabled = currentWeaponSetting.autoSlow;
