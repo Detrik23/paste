@@ -14,6 +14,7 @@
 #include "Windows/colors.h"
 #include "Windows/main.h"
 #include "Windows/walk.h"
+#include "Windows/quickMenu.h"
 #include "Tabs/aimbottab.h"
 #include "Tabs/triggerbottab.h"
 #include "Tabs/visualstab.h"
@@ -30,6 +31,7 @@ namespace UI
 	void SwapWindow();
 	void SetupColors();
 	void SetupWindows();
+	void QuickToggle(bool enable);
 	bool ColorPicker(float* col, bool alphabar);
 	bool ColorPicker3(float col[3]);
 	bool ColorPicker4(float col[4]);

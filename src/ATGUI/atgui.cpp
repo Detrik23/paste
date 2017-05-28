@@ -4,9 +4,9 @@ bool UI::isVisible = false;
 
 bool Settings::ScreenshotCleaner::enabled = false;
 
-ColorVar Settings::UI::mainColor = ImColor(54, 54, 54, 255);
-ColorVar Settings::UI::bodyColor = ImColor(24, 24, 24, 240);
-ColorVar Settings::UI::fontColor = ImColor(255, 255, 255, 255);
+ColorVar Settings::UI::mainColor = ImColor(0, 218, 70, 156);
+ColorVar Settings::UI::bodyColor = ImColor(5, 24, 32, 238);
+ColorVar Settings::UI::fontColor = ImColor(0, 254, 219, 255);
 
 #define IM_ARRAYSIZE(_ARR)  ((int)(sizeof(_ARR)/sizeof(*_ARR)))
 
@@ -44,10 +44,18 @@ void SetupMainMenuBar()
 	}
 }
 
+void UI::QuickToggle(bool enable)
+{
+	QuickMenu::windowPos = ImGui::GetIO().MousePos;
+	QuickMenu::showWindow = enable;
+}
+
 void UI::SwapWindow()
 {
-	if (UI::isVisible)
+	if (UI::isVisible) {
+		Draw::ImDrawText(ImVec2(4.f, 4.f), ImColor(255, 255, 255, 255), "Press Alt for menu", NULL, 0.0f, NULL, ImFontFlags_Shadow);
 		return;
+	}
 
 	if (engine->IsInGame())
 		return;
@@ -65,7 +73,7 @@ void UI::SetupWindows()
 {
 	if (UI::isVisible)
 	{
-		SetupMainMenuBar();
+		//SetupMainMenuBar();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(960, 645));
 			Main::RenderWindow();
@@ -82,6 +90,7 @@ void UI::SetupWindows()
 		Colors::RenderWindow();
 		PlayerList::RenderWindow();
 		Walk::RenderWindow();
+		QuickMenu::RenderWindow();
 	}
 
 	ShowSpectators::RenderWindow();
