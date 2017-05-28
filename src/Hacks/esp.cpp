@@ -1315,7 +1315,36 @@ void ESP::DrawSpread()
 	{
 		float cone = Settings::Aimbot::SpreadLimit::value;
 		if( cone > 0.0f ){
-			float radius = ( cone * height ) / 1.5f;
+			
+			float radius;
+			if (Settings::Aimbot::SpreadLimit::distanceBased)
+			{
+				Vector src3D, dst3D, forward;
+					trace_t tr;
+				Ray_t ray;
+				CTraceFilter filter;
+	
+				QAngle angles = viewanglesBackup;
+				Math::AngleVectors(angles, forward);
+				filter.pSkip = localplayer;
+				src3D = localplayer->GetEyePosition();
+				dst3D = src3D + (forward * 8192);
+		
+				ray.Init(src3D, dst3D);
+				trace->TraceRay(ray, MASK_SHOT, &filter, &tr);
+	
+				float dX = tr.endpos.x - src3D.x;
+				float dY = tr.endpos.y - src3D.y;
+				float dZ = tr.endpos.z - src3D.z;
+				float dist = cbrt( (dX * dX) + (dY * dY) + (dZ * dZ));
+
+				radius = cone * height / 1.5f * 100.0f / dist;
+			}
+			else
+			{
+				radius = cone * height / 1.5f;
+			}
+
 			Draw::Rectangle(Vector2D(((width/2)-radius), (height/2)-radius+1), Vector2D( (width/2)+radius+1, (height/2)+radius+2), Color::FromImColor(Settings::ESP::Spread::spreadLimitColor.Color()));
 		}
 	}

@@ -165,7 +165,7 @@ struct AimbotWeapon_t
 	Bone bone;
 	SmoothType smoothType;
 	ButtonCode_t aimkey;
-	bool aimkeyOnly, smoothEnabled, smoothSaltEnabled, errorMarginEnabled, autoAimEnabled, aimStepEnabled, rcsEnabled, rcsAlwaysOn, spreadLimitEnabled;
+	bool aimkeyOnly, smoothEnabled, smoothSaltEnabled, errorMarginEnabled, autoAimEnabled, aimStepEnabled, rcsEnabled, rcsAlwaysOn, spreadLimitEnabled, spreadLimitDistance;
 	float smoothAmount, smoothSaltMultiplier, errorMarginValue, autoAimFov, aimStepValue, rcsAmountX, rcsAmountY, autoWallValue, spreadLimit;
 	bool autoCockRevolver, autoPistolEnabled, autoShootEnabled, autoScopeEnabled, noShootEnabled, ignoreJumpEnabled, smokeCheck, flashCheck, autoWallEnabled, autoWallBones[6], autoAimRealDistance, autoSlow, predEnabled;
 
@@ -176,7 +176,7 @@ struct AimbotWeapon_t
 		   bool rcsEnabled, bool rcsAlwaysOn, float rcsAmountX, float rcsAmountY,
 		   bool autoCockRevolver, bool autoPistolEnabled, bool autoShootEnabled, bool autoScopeEnabled,
 		   bool noShootEnabled, bool ignoreJumpEnabled, bool smokeCheck, bool flashCheck,
-		   bool spreadLimitEnabled, float spreadLimit,
+		   bool spreadLimitEnabled, bool spreadLimitDistance, float spreadLimit,
 		   bool autoWallEnabled, float autoWallValue, bool autoAimRealDistance, bool autoSlow,
 		   bool predEnabled, bool autoWallBones[6] = nullptr)
 	{
@@ -215,6 +215,7 @@ struct AimbotWeapon_t
 		this->smokeCheck = smokeCheck;
 		this->flashCheck = flashCheck;
 		this->spreadLimitEnabled = spreadLimitEnabled;
+		this->spreadLimitDistance = spreadLimitDistance;
 		this->spreadLimit = spreadLimit;
 		this->autoWallEnabled = autoWallEnabled;
 		this->autoWallValue = autoWallValue;
@@ -279,6 +280,7 @@ struct AimbotWeapon_t
 			this->smokeCheck == another.smokeCheck &&
 			this->flashCheck == another.flashCheck &&
 			this->spreadLimitEnabled == another.spreadLimitEnabled &&
+			this->spreadLimitDistance == another.spreadLimitDistance &&
 			this->spreadLimit == another.spreadLimit &&
 			this->autoWallEnabled == another.autoWallEnabled &&
 			this->autoWallValue == another.autoWallValue &&
@@ -465,6 +467,7 @@ namespace Settings
 		namespace SpreadLimit
 		{
 			extern bool enabled;
+			extern bool distanceBased;
 			extern float value;
 		}
 

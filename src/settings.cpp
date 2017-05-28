@@ -180,6 +180,7 @@ void Settings::LoadDefaultsOrSave(std::string path)
 		weaponSetting["SmokeCheck"]["Enabled"] = i.second.smokeCheck;
 		weaponSetting["FlashCheck"]["Enabled"] = i.second.flashCheck;
 		weaponSetting["SpreadLimit"]["Enabled"] = i.second.spreadLimitEnabled;
+		weaponSetting["SpreadLimit"]["DistanceBased"] = i.second.spreadLimitDistance;
 		weaponSetting["SpreadLimit"]["Value"] = i.second.spreadLimit;
 		weaponSetting["AutoWall"]["Enabled"] = i.second.autoWallEnabled;
 		weaponSetting["AutoWall"]["Value"] = i.second.autoWallValue;
@@ -542,7 +543,7 @@ void Settings::LoadConfig(std::string path)
 	Fonts::SetupFonts();
 
 	Settings::Aimbot::weapons = {
-			{ ItemDefinitionIndex::INVALID, { false, false, false, false, false, false, false, 700, Bone::BONE_HEAD, ButtonCode_t::MOUSE_MIDDLE, false, false, 1.0f, SmoothType::SLOW_END, false, 0.0f, false, 0.0f, true, 180.0f, false, 25.0f, false, false, 2.0f, 2.0f, false, false, false, false, false, false, false, false, false, 0.1f, false, 10.0f, false, false, 5.0f } },
+			{ ItemDefinitionIndex::INVALID, { false, false, false, false, false, false, false, 700, Bone::BONE_HEAD, ButtonCode_t::MOUSE_MIDDLE, false, false, 1.0f, SmoothType::SLOW_END, false, 0.0f, false, 0.0f, true, 180.0f, false, 25.0f, false, false, 2.0f, 2.0f, false, false, false, false, false, false, false, false, false, false, 0.1f, false, 10.0f, false, false, 5.0f } },
 	};
 
 	for (Json::ValueIterator itr = settings["Aimbot"]["weapons"].begin(); itr != settings["Aimbot"]["weapons"].end(); itr++)
@@ -600,6 +601,7 @@ void Settings::LoadConfig(std::string path)
 				weaponSetting["IgnoreJump"]["Enabled"].asBool(),
 				weaponSetting["SmokeCheck"]["Enabled"].asBool(),
 				weaponSetting["FlashCheck"]["Enabled"].asBool(),
+				weaponSetting["SpreadLimit"]["DistanceBased"].asBool(),
 				weaponSetting["SpreadLimit"]["Enabled"].asBool(),
 				weaponSetting["SpreadLimit"]["Value"].asFloat(),
 				weaponSetting["AutoWall"]["Enabled"].asBool(),

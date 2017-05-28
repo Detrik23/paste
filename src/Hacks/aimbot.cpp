@@ -28,6 +28,7 @@ bool Settings::Aimbot::AutoAim::engageLock = false;
 bool Settings::Aimbot::AutoAim::engageLockTR = false; // engage lock Target Reacquisition ( re-target after getting a kill when spraying ).
 int Settings::Aimbot::AutoAim::engageLockTTR = 700; // Time to Target Reacquisition in ms
 bool Settings::Aimbot::SpreadLimit::enabled = false;
+bool Settings::Aimbot::SpreadLimit::distanceBased = false;
 float Settings::Aimbot::SpreadLimit::value = 0.1f;
 bool Settings::Aimbot::AutoWall::enabled = false;
 float Settings::Aimbot::AutoWall::value = 10.0f;
@@ -75,7 +76,7 @@ std::unordered_map<Hitbox, std::vector<const char*>, Util::IntHash<Hitbox>> hitb
 };
 
 std::unordered_map<ItemDefinitionIndex, AimbotWeapon_t, Util::IntHash<ItemDefinitionIndex>> Settings::Aimbot::weapons = {
-		{ ItemDefinitionIndex::INVALID, { false, false, false, false, false, false, false, 700, Bone::BONE_HEAD, ButtonCode_t::MOUSE_MIDDLE, false, false, 1.0f, SmoothType::SLOW_END, false, 0.0f, false, 0.0f, true, 180.0f, false, 25.0f, false, false, 2.0f, 2.0f, false, false, false, false, false, false, false, false, false, 0.1f, false, 10.0f, false, false, 5.0f } },
+		{ ItemDefinitionIndex::INVALID, { false, false, false, false, false, false, false, 700, Bone::BONE_HEAD, ButtonCode_t::MOUSE_MIDDLE, false, false, 1.0f, SmoothType::SLOW_END, false, 0.0f, false, 0.0f, true, 180.0f, false, 25.0f, false, false, 2.0f, 2.0f, false, false, false, false, false, false, false, false, false, false, 0.1f, false, 10.0f, false, false, 5.0f } },
 };
 
 static QAngle ApplyErrorToAngle(QAngle* angles, float margin)
@@ -586,12 +587,31 @@ void Aimbot::AutoPistol(C_BaseCombatWeapon* activeWeapon, CUserCmd* cmd)
 		cmd->buttons &= ~IN_ATTACK;
 }
 
+float GetDistanceForward (C_BasePlayer* player, QAngle angles, CUserCmd* cmd)
+{	
+	Vector src3D, dst3D, forward;
+	trace_t tr;
+	Ray_t ray;
+	CTraceFilter filter;
+	
+	Math::AngleVectors(angles, forward);
+	filter.pSkip = player;
+	src3D = player->GetEyePosition();
+	dst3D = src3D + (forward * 8192);
+		
+	ray.Init(src3D, dst3D);
+	trace->TraceRay(ray, MASK_SHOT, &filter, &tr);
+	
+	float dX = tr.endpos.x - src3D.x;
+	float dY = tr.endpos.y - src3D.y;
+	float dZ = tr.endpos.z - src3D.z;
+
+	return cbrt( (dX * dX) + (dY * dY) + (dZ * dZ));
+}
+
 void Aimbot::AutoShoot(C_BasePlayer* player, C_BaseCombatWeapon* activeWeapon, CUserCmd* cmd)
 {
 	if (!Settings::Aimbot::AutoShoot::enabled)
-		return;
-
-	if( Settings::Aimbot::SpreadLimit::enabled && ((activeWeapon->GetSpread() + activeWeapon->GetInaccuracy()) > Settings::Aimbot::SpreadLimit::value))
 		return;
 
 	if (Settings::Aimbot::AimStep::enabled && Aimbot::aimStepInProgress)
@@ -608,7 +628,15 @@ void Aimbot::AutoShoot(C_BasePlayer* player, C_BaseCombatWeapon* activeWeapon, C
 		return;
 
 	C_BasePlayer* localplayer = (C_BasePlayer*) entityList->GetClientEntity(engine->GetLocalPlayer());
+	
+	
+	float spreadValue = Settings::Aimbot::SpreadLimit::value;
+	if (Settings::Aimbot::SpreadLimit::distanceBased)
+		spreadValue *= 100.0f / GetDistanceForward(localplayer, cmd->viewangles, cmd);
+	if( Settings::Aimbot::SpreadLimit::enabled && ((activeWeapon->GetSpread() + activeWeapon->GetInaccuracy()) > spreadValue))
+		return;
 
+	
 	if( Settings::Aimbot::AutoShoot::velocityCheck && localplayer->GetVelocity().Length() > (activeWeapon->GetCSWpnData()->GetMaxPlayerSpeed() / 3) )
 		return;
 
@@ -887,6 +915,7 @@ void Aimbot::UpdateValues()
 	Settings::Aimbot::SmokeCheck::enabled = currentWeaponSetting.smokeCheck;
 	Settings::Aimbot::FlashCheck::enabled = currentWeaponSetting.flashCheck;
 	Settings::Aimbot::SpreadLimit::enabled = currentWeaponSetting.spreadLimitEnabled;
+	Settings::Aimbot::SpreadLimit::distanceBased = currentWeaponSetting.spreadLimitDistance;
 	Settings::Aimbot::SpreadLimit::value = currentWeaponSetting.spreadLimit;
 	Settings::Aimbot::AutoWall::enabled = currentWeaponSetting.autoWallEnabled;
 	Settings::Aimbot::AutoWall::value = currentWeaponSetting.autoWallValue;

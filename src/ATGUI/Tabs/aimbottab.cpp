@@ -41,10 +41,11 @@ static bool noShootEnabled = false;
 static bool ignoreJumpEnabled = false;
 static bool smokeCheck = false;
 static bool flashCheck = false;
+static bool spreadLimitEnabled = false;
+static bool spreadLimitDistance = false;
+static float spreadLimit = 0.1f;
 static bool autoWallEnabled = false;
 static float autoWallValue = 10.0f;
-static bool spreadLimitEnabled = false;
-static float spreadLimit = 0.1f;
 static bool autoWallBones[] = { true, false, false, false, false, false };
 static bool autoAimRealDistance = false;
 static bool autoSlow = false;
@@ -91,6 +92,7 @@ void UI::ReloadWeaponSettings()
 	smokeCheck = Settings::Aimbot::weapons.at(index).smokeCheck;
 	flashCheck = Settings::Aimbot::weapons.at(index).flashCheck;
 	spreadLimitEnabled = Settings::Aimbot::weapons.at(index).spreadLimitEnabled;
+	spreadLimitDistance = Settings::Aimbot::weapons.at(index).spreadLimitDistance;
 	spreadLimit = Settings::Aimbot::weapons.at(index).spreadLimit;
 	autoWallEnabled = Settings::Aimbot::weapons.at(index).autoWallEnabled;
 	autoWallValue = Settings::Aimbot::weapons.at(index).autoWallValue;
@@ -116,7 +118,7 @@ void UI::UpdateWeaponSettings()
 			autoAimEnabled, autoAimValue, aimStepEnabled, aimStepValue,
 			rcsEnabled, rcsAlwaysOn, rcsAmountX, rcsAmountY,
 			autoCockRevolver, autoPistolEnabled, autoShootEnabled, autoScopeEnabled,
-			noShootEnabled, ignoreJumpEnabled, smokeCheck, flashCheck, spreadLimitEnabled, spreadLimit, autoWallEnabled, autoWallValue, autoAimRealDistance, autoSlow, predEnabled
+			noShootEnabled, ignoreJumpEnabled, smokeCheck, flashCheck, spreadLimitEnabled, spreadLimitDistance, spreadLimit, autoWallEnabled, autoWallValue, autoAimRealDistance, autoSlow, predEnabled
 	};
 
 	for (int bone = (int) Hitbox::HITBOX_HEAD; bone <= (int) Hitbox::HITBOX_ARMS; bone++)
@@ -454,23 +456,20 @@ void Aimbot::RenderTab()
 				ImGui::Checkbox("^Velocity Check", &Settings::Aimbot::AutoShoot::velocityCheck);
 				SetTooltip("Auto Shoot when below move penalty threshold.\nRecommend using with Auto-Slow");
 				if( ImGui::Checkbox("Spread Limit", &spreadLimitEnabled) )
-				UI::UpdateWeaponSettings();
+					UI::UpdateWeaponSettings();
 				SetTooltip("Auto Shoot below a certain inaccuracy threshold.\nGood for weapons such as deagle");
 				if( ImGui::SliderFloat("##SPREADLIMIT", &spreadLimit, 0, 0.1) )
 					UI::UpdateWeaponSettings();
 				SetTooltip("Visuals - Show Spreadlimit to see how big this is");
+				if( ImGui::Checkbox("Distance-Based Limit", &spreadLimitDistance) )
+					UI::UpdateWeaponSettings();
+				SetTooltip("Distance based spread limit. Makes the limit lower if the target is further away.");
 				if (ImGui::Checkbox("Silent Aim", &silent))
 					UI::UpdateWeaponSettings();
 				SetTooltip("Prevents the camera from locking to an enemy, doesn't work for demos");
 				if (ImGui::Checkbox("pSilent", &pSilent))
 					UI::UpdateWeaponSettings();
 				SetTooltip("Works only on community servers. Prevents the camera from locking to an enemy.");
-				if (ImGui::Checkbox("Smoke Check", &smokeCheck))
-					UI::UpdateWeaponSettings();
-				SetTooltip("Ignore players that are blocked by smoke");
-				if (ImGui::Checkbox("Prediction", &predEnabled))
-					UI::UpdateWeaponSettings();
-				SetTooltip("Use velocity prediction");
 			}
 			ImGui::NextColumn();
 			{
@@ -486,6 +485,12 @@ void Aimbot::RenderTab()
 				if (ImGui::Checkbox("Flash Check", &flashCheck))
 					UI::UpdateWeaponSettings();
 				SetTooltip("Disable aimbot while flashed");
+				if (ImGui::Checkbox("Smoke Check", &smokeCheck))
+					UI::UpdateWeaponSettings();
+				SetTooltip("Ignore players that are blocked by smoke");
+				if (ImGui::Checkbox("Prediction", &predEnabled))
+					UI::UpdateWeaponSettings();
+				SetTooltip("Use velocity prediction");
 			}
 
 
