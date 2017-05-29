@@ -15,20 +15,20 @@ If you're having problems compiling make sure you've got the latest version of `
 ────────────────────────────────────────────────────────────────────────────────
 __Ubuntu-Based / Debian:__
 ```bash
-sudo apt-get install cmake g++ gdb git libsdl2-dev zlib1g-dev
+sudo apt-get install cmake g++ gdb git libsdl2-dev zlib1g-dev liblua5.3
 ```
 __Arch:__
 ```bash
-sudo pacman -S base-devel cmake gdb git sdl2
+sudo pacman -S base-devel cmake gdb git sdl2 lua
 ```
 __Fedora:__
 ```bash
-sudo dnf install cmake gcc-c++ gdb git libstdc++-static mesa-libGL-devel SDL2-devel zlib-devel
+sudo dnf install cmake gcc-c++ gdb git libstdc++-static mesa-libGL-devel SDL2-devel zlib-devel lua-devel
 ```
 
 __Gentoo:__
 ```bash
-sudo emerge cmake dev-vcs/git gdb libsdl2 mesa
+sudo emerge cmake dev-vcs/git gdb libsdl2 mesa (Lua dev libs >= 5.3)
 ```
 ────────────────────────────────────────────────────────────────────────────────
 
