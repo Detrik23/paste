@@ -94,7 +94,6 @@ void Resolver::FrameStageNotify(ClientFrameStage_t stage)
 				|| player->GetTeam() == localplayer->GetTeam())
 				continue;
 
-			Resolve(player);
 
 			IEngineClient::player_info_t entityInformation;
 			engine->GetPlayerInfo(i, &entityInformation);
@@ -103,6 +102,7 @@ void Resolver::FrameStageNotify(ClientFrameStage_t stage)
 				continue;
 
 			player_data.push_back(std::pair<C_BasePlayer*, QAngle>(player, *player->GetEyeAngles()));
+			Resolve(player);
 
 			//player->GetEyeAngles()->y = *player->GetLowerBodyYawTarget();
 				static bool bFlip = true;
@@ -140,6 +140,10 @@ void Resolver::FrameStageNotify(ClientFrameStage_t stage)
 
 		player_data.clear();
 	}
+}
+
+void Resolver::PostFrameStageNotify(ClientFrameStage_t stage)
+{
 }
 
 
@@ -265,10 +269,6 @@ float Resolver::GetDeltaByComparingTicks(const std::deque<CTickRecord>& l) {
         }
     }
     return 0.f;
-}
-
-void Resolver::PostFrameStageNotify(ClientFrameStage_t stage)
-{
 }
 
 void Resolver::FireGameEvent(IGameEvent* event)
