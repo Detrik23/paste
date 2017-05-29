@@ -25,6 +25,8 @@ static bool smoothSaltEnabled = false;
 static float smoothSaltMultiplier = 0.0f;
 static bool errorMarginEnabled = false;
 static float errorMarginValue = 0.0f;
+static bool curveEnabled = false;
+static float curveAmount = 0.5f;
 static bool autoAimEnabled = false;
 static float autoAimValue = 180.0f;
 static bool aimStepEnabled = false;
@@ -75,6 +77,8 @@ void UI::ReloadWeaponSettings()
 	smoothSaltMultiplier = Settings::Aimbot::weapons.at(index).smoothSaltMultiplier;
 	errorMarginEnabled = Settings::Aimbot::weapons.at(index).errorMarginEnabled;
 	errorMarginValue = Settings::Aimbot::weapons.at(index).errorMarginValue;
+	curveEnabled = Settings::Aimbot::weapons.at(index).curveAmount;
+	curveAmount = Settings::Aimbot::weapons.at(index).curveAmount;
 	autoAimEnabled = Settings::Aimbot::weapons.at(index).autoAimEnabled;
 	autoAimValue = Settings::Aimbot::weapons.at(index).autoAimFov;
 	aimStepEnabled = Settings::Aimbot::weapons.at(index).aimStepEnabled;
@@ -115,6 +119,7 @@ void UI::UpdateWeaponSettings()
 			enabled, silent, pSilent, friendly, closestBone, engageLock, engageLockTR, engageLockTTR, bone, aimkey, aimkeyOnly,
 			smoothEnabled, smoothValue, smoothType, smoothSaltEnabled, smoothSaltMultiplier,
 			errorMarginEnabled, errorMarginValue,
+			curveEnabled, curveAmount,
 			autoAimEnabled, autoAimValue, aimStepEnabled, aimStepValue,
 			rcsEnabled, rcsAlwaysOn, rcsAmountX, rcsAmountY,
 			autoCockRevolver, autoPistolEnabled, autoShootEnabled, autoScopeEnabled,
@@ -357,6 +362,9 @@ void Aimbot::RenderTab()
 			ImGui::Separator();
 			ImGui::Columns(2, NULL, true);
 			{
+				if (ImGui::Checkbox("Curve", &curveEnabled))
+					UI::UpdateWeaponSettings();
+				SetTooltip("Curve makes aim not go in a straight line. Used with smoothing");
 				if (ImGui::Checkbox("Smoothing", &smoothEnabled))
 					UI::UpdateWeaponSettings();
 				SetTooltip("Smoothing reduces the aimbot \"snap\". 0 for full snap. 1 for full smoothing");
@@ -374,6 +382,8 @@ void Aimbot::RenderTab()
 			ImGui::NextColumn();
 			{
 				ImGui::PushItemWidth(-1);
+				if (ImGui::SliderFloat("##CURVE", &curveAmount, 0, 2))
+					UI::UpdateWeaponSettings();
 				if (ImGui::SliderFloat("##SMOOTH", &smoothValue, 0, 1))
 					UI::UpdateWeaponSettings();
 				if (ImGui::SliderFloat("##SALT", &smoothSaltMultiplier, 0, smoothValue))

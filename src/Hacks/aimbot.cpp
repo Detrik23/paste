@@ -14,6 +14,8 @@ float Settings::Aimbot::Smooth::value = 0.5f;
 SmoothType Settings::Aimbot::Smooth::type = SmoothType::SLOW_END;
 bool Settings::Aimbot::ErrorMargin::enabled = false;
 float Settings::Aimbot::ErrorMargin::value = 0.0f;
+bool Settings::Aimbot::Curve::enabled = false;
+float Settings::Aimbot::Curve::value = 0.5f;
 bool Settings::Aimbot::AutoAim::enabled = false;
 float Settings::Aimbot::AutoAim::fov = 180.0f;
 bool Settings::Aimbot::AutoAim::realDistance = false;
@@ -76,7 +78,7 @@ std::unordered_map<Hitbox, std::vector<const char*>, Util::IntHash<Hitbox>> hitb
 };
 
 std::unordered_map<ItemDefinitionIndex, AimbotWeapon_t, Util::IntHash<ItemDefinitionIndex>> Settings::Aimbot::weapons = {
-		{ ItemDefinitionIndex::INVALID, { false, false, false, false, false, false, false, 700, Bone::BONE_HEAD, ButtonCode_t::MOUSE_MIDDLE, false, false, 1.0f, SmoothType::SLOW_END, false, 0.0f, false, 0.0f, true, 180.0f, false, 25.0f, false, false, 2.0f, 2.0f, false, false, false, false, false, false, false, false, false, false, 0.1f, false, 10.0f, false, false, 5.0f } },
+		{ ItemDefinitionIndex::INVALID, { false, false, false, false, false, false, false, 700, Bone::BONE_HEAD, ButtonCode_t::MOUSE_MIDDLE, false, false, 1.0f, SmoothType::SLOW_END, false, 0.0f, false, 0.0f, false, 0.5f, true, 180.0f, false, 25.0f, false, false, 2.0f, 2.0f, false, false, false, false, false, false, false, false, false, false, 0.1f, false, 10.0f, false, false, 5.0f } },
 };
 
 static QAngle ApplyErrorToAngle(QAngle* angles, float margin)
@@ -739,7 +741,7 @@ void Aimbot::CreateMove(CUserCmd* cmd)
 	if (player)
 	{
 		bool skipPlayer = false;
-
+		
 		Vector eVecTarget = player->GetBonePosition(aw_bone);
 		Vector pVecTarget = localplayer->GetEyePosition();
 
@@ -776,8 +778,14 @@ void Aimbot::CreateMove(CUserCmd* cmd)
 					pVecTarget = VelocityExtrapolate(localplayer, pVecTarget); // get eye pos next tick
 					eVecTarget = VelocityExtrapolate(player, eVecTarget); // get target pos next tick
 				}
+				
 				angle = Math::CalcAngle(pVecTarget, eVecTarget);
-
+				if (Settings::Aimbot::Smooth::enabled && Settings::Aimbot::Curve::enabled) {
+					float dist = Math::ClampYaw(angle.y - oldAngle.y);
+					if (dist > 180.0f) dist = 360.0f - dist;
+					eVecTarget += Vector(0, 0, Settings::Aimbot::Curve::value * dist);
+					angle = Math::CalcAngle(pVecTarget, eVecTarget);
+				}
 				//cvar->ConsoleDPrintf("Raw Angle = (%.2f, %.2f, %.2f)\n", angle.x, angle.y, angle.z);
 
 				if (Settings::Aimbot::ErrorMargin::enabled)
@@ -890,6 +898,8 @@ void Aimbot::UpdateValues()
 	Settings::Aimbot::Smooth::enabled = currentWeaponSetting.smoothEnabled;
 	Settings::Aimbot::Smooth::value = currentWeaponSetting.smoothAmount;
 	Settings::Aimbot::Smooth::type = currentWeaponSetting.smoothType;
+	Settings::Aimbot::Curve::enabled = currentWeaponSetting.curveEnabled;
+	Settings::Aimbot::Curve::value = currentWeaponSetting.curveAmount;
 	Settings::Aimbot::ErrorMargin::enabled = currentWeaponSetting.errorMarginEnabled;
 	Settings::Aimbot::ErrorMargin::value = currentWeaponSetting.errorMarginValue;
 	Settings::Aimbot::AutoAim::enabled = currentWeaponSetting.autoAimEnabled;

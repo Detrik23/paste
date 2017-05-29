@@ -163,6 +163,8 @@ void Settings::LoadDefaultsOrSave(std::string path)
 		weaponSetting["Smooth"]["Salting"]["Multiplier"] = i.second.smoothSaltMultiplier;
 		weaponSetting["ErrorMargin"]["Enabled"] = i.second.errorMarginEnabled;
 		weaponSetting["ErrorMargin"]["Value"] = i.second.errorMarginValue;
+		weaponSetting["Curve"]["Enabled"] = i.second.curveEnabled;
+		weaponSetting["Curve"]["Amount"] = i.second.curveAmount;
 		weaponSetting["AutoAim"]["Enabled"] = i.second.autoAimEnabled;
 		weaponSetting["AutoAim"]["FOV"] = i.second.autoAimFov;
 		weaponSetting["AimStep"]["Enabled"] = i.second.aimStepEnabled;
@@ -549,7 +551,7 @@ void Settings::LoadConfig(std::string path)
 	Fonts::SetupFonts();
 
 	Settings::Aimbot::weapons = {
-			{ ItemDefinitionIndex::INVALID, { false, false, false, false, false, false, false, 700, Bone::BONE_HEAD, ButtonCode_t::MOUSE_MIDDLE, false, false, 1.0f, SmoothType::SLOW_END, false, 0.0f, false, 0.0f, true, 180.0f, false, 25.0f, false, false, 2.0f, 2.0f, false, false, false, false, false, false, false, false, false, false, 0.1f, false, 10.0f, false, false, 5.0f } },
+			{ ItemDefinitionIndex::INVALID, { false, false, false, false, false, false, false, 700, Bone::BONE_HEAD, ButtonCode_t::MOUSE_MIDDLE, false, false, 1.0f, SmoothType::SLOW_END, false, 0.0f, false, 0.0f, false, 0.0f, true, 180.0f, false, 25.0f, false, false, 2.0f, 2.0f, false, false, false, false, false, false, false, false, false, false, 0.1f, false, 10.0f, false, false, 5.0f } },
 	};
 
 	for (Json::ValueIterator itr = settings["Aimbot"]["weapons"].begin(); itr != settings["Aimbot"]["weapons"].end(); itr++)
@@ -591,6 +593,8 @@ void Settings::LoadConfig(std::string path)
 				weaponSetting["Smooth"]["Salting"]["Multiplier"].asFloat(),
 				weaponSetting["ErrorMargin"]["Enabled"].asBool(),
 				weaponSetting["ErrorMargin"]["Value"].asFloat(),
+				weaponSetting["Curve"]["Enabled"].asBool(),
+				weaponSetting["Curve"]["Amount"].asFloat(),
 				weaponSetting["AutoAim"]["Enabled"].asBool(),
 				weaponSetting["AutoAim"]["FOV"].asFloat(),
 				weaponSetting["AimStep"]["Enabled"].asBool(),

@@ -176,13 +176,14 @@ struct AimbotWeapon_t
 	Bone bone;
 	SmoothType smoothType;
 	ButtonCode_t aimkey;
-	bool aimkeyOnly, smoothEnabled, smoothSaltEnabled, errorMarginEnabled, autoAimEnabled, aimStepEnabled, rcsEnabled, rcsAlwaysOn, spreadLimitEnabled, spreadLimitDistance;
-	float smoothAmount, smoothSaltMultiplier, errorMarginValue, autoAimFov, aimStepValue, rcsAmountX, rcsAmountY, autoWallValue, spreadLimit;
+	bool aimkeyOnly, smoothEnabled, smoothSaltEnabled, errorMarginEnabled, curveEnabled, autoAimEnabled, aimStepEnabled, rcsEnabled, rcsAlwaysOn, spreadLimitEnabled, spreadLimitDistance;
+	float smoothAmount, smoothSaltMultiplier, curveAmount, errorMarginValue, autoAimFov, aimStepValue, rcsAmountX, rcsAmountY, autoWallValue, spreadLimit;
 	bool autoCockRevolver, autoPistolEnabled, autoShootEnabled, autoScopeEnabled, noShootEnabled, ignoreJumpEnabled, smokeCheck, flashCheck, autoWallEnabled, autoWallBones[6], autoAimRealDistance, autoSlow, predEnabled;
 
 	AimbotWeapon_t(bool enabled, bool silent, bool pSilent, bool friendly, bool closestBone, bool engageLock, bool engageLockTR, int engageLockTTR, Bone bone, ButtonCode_t aimkey, bool aimkeyOnly,
 		   bool smoothEnabled, float smoothValue, SmoothType smoothType, bool smoothSaltEnabled, float smoothSaltMultiplier,
 		   bool errorMarginEnabled, float errorMarginValue,
+		   bool curveEnabled, float curveAmount,
 		   bool autoAimEnabled, float autoAimValue, bool aimStepEnabled, float aimStepValue,
 		   bool rcsEnabled, bool rcsAlwaysOn, float rcsAmountX, float rcsAmountY,
 		   bool autoCockRevolver, bool autoPistolEnabled, bool autoShootEnabled, bool autoScopeEnabled,
@@ -209,6 +210,8 @@ struct AimbotWeapon_t
 		this->smoothSaltMultiplier = smoothSaltMultiplier;
 		this->errorMarginEnabled = errorMarginEnabled;
 		this->errorMarginValue = errorMarginValue;
+		this->curveEnabled = curveEnabled;
+		this->curveAmount = curveAmount;
 		this->autoAimEnabled = autoAimEnabled;
 		this->autoAimFov = autoAimValue;
 		this->aimStepEnabled = aimStepEnabled;
@@ -386,6 +389,12 @@ namespace Settings
 				extern bool enabled;
 				extern float multiplier;
 			}
+		}
+
+		namespace Curve
+		{
+			extern bool enabled;
+			extern float value;
 		}
 
 		namespace ErrorMargin
