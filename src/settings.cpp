@@ -500,6 +500,10 @@ void Settings::LoadDefaultsOrSave(std::string path)
 	settings["WalkBot"]["autobuy"] = Settings::WalkBot::autobuy;
 	settings["WalkBot"]["autobuyAt"] = Settings::WalkBot::autobuyAt;
 
+	settings["Watermark"]["enabled"] = Settings::Watermark::enabled;
+	settings["Watermark"]["text"] = Settings::Watermark::text;
+	LoadColor(settings["Watermark"]["color"], Settings::Watermark::color);
+
 	settings["GrenadeHelper"]["enabled"] = Settings::GrenadeHelper::enabled;
 	settings["GrenadeHelper"]["aimAssist"] = Settings::GrenadeHelper::aimAssist;
 	settings["GrenadeHelper"]["OnlyMatching"] = Settings::GrenadeHelper::onlyMatchingInfos;
@@ -988,6 +992,10 @@ void Settings::LoadConfig(std::string path)
 	// GetVal(settings["WalkBot"]["enabled"], &Settings::WalkBot::enabled);
 	GetVal(settings["WalkBot"]["autobuy"], &Settings::WalkBot::autobuy);
 	GetVal(settings["WalkBot"]["autobuyAt"], &Settings::WalkBot::autobuyAt);
+
+	GetVal(settings["Watermark"]["enabled"], &Settings::Watermark::enabled);
+	GetVal(settings["Watermark"]["text"], &Settings::Watermark::text);
+	GetVal(settings["Watermark"]["color"], &Settings::Watermark::color);
 	
 	GetVal(settings["AutoKnife"]["enabled"], &Settings::AutoKnife::enabled);
 	GetVal(settings["AutoKnife"]["Filters"]["enemies"], &Settings::AutoKnife::Filters::enemies);

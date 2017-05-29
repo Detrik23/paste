@@ -1024,6 +1024,13 @@ namespace Settings
 		extern int autobuyAt;
 	}
 
+	namespace Watermark
+	{
+		extern bool enabled;
+		extern char* text;
+		extern ColorVar color;
+	}
+
 	namespace AutoKnife
 	{
 		extern bool enabled;
