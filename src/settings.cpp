@@ -201,7 +201,9 @@ void Settings::LoadDefaultsOrSave(std::string path)
 	settings["Aimbot"]["AutoCrouch"]["enabled"] = Settings::Aimbot::AutoCrouch::enabled;
 	settings["Aimbot"]["AutoShoot"]["velocityCheck"] = Settings::Aimbot::AutoShoot::velocityCheck;
 
-	settings["Resolver"]["resolve_all"] = Settings::Resolver::resolveAll;
+	settings["Resolver"]["ticks"] = Settings::Resolver::ticks;
+	settings["Resolver"]["modulo"] = Settings::Resolver::modulo;
+	settings["Resolver"]["mode"] = (int) Settings::Resolver::mode;
 
 	settings["Triggerbot"]["enabled"] = Settings::Triggerbot::enabled;
 	settings["Triggerbot"]["key"] = Util::GetButtonName(Settings::Triggerbot::key);
@@ -625,8 +627,9 @@ void Settings::LoadConfig(std::string path)
 	GetVal(settings["Aimbot"]["AutoCrouch"]["enabled"], &Settings::Aimbot::AutoCrouch::enabled);
 	GetVal(settings["Aimbot"]["AutoShoot"]["velocityCheck"], &Settings::Aimbot::AutoShoot::velocityCheck);
 
-
-	GetVal(settings["Resolver"]["resolve_all"], &Settings::Resolver::resolveAll);
+	GetVal(settings["Resolver"]["ticks"], &Settings::Resolver::ticks);
+	GetVal(settings["Resolver"]["modulo"], &Settings::Resolver::modulo);
+	GetVal(settings["Resolver"]["mode"], (int*) &Settings::Resolver::mode);
 
 	GetVal(settings["Triggerbot"]["enabled"], &Settings::Triggerbot::enabled);
 	GetButtonCode(settings["Triggerbot"]["key"], &Settings::Triggerbot::key);

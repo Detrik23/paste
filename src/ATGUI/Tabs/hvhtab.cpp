@@ -12,6 +12,10 @@ void HvH::RenderTab()
 			"FAKE UP", "FAKE DOWN", "LISP DOWN", "ANGEL DOWN", "ANGEL UP", "LUA UNCLAMPED" // untrusted
 	};
 
+	const char* resolverModes[] = {
+			"OFF", "FORCE", "DELTA", "STEADY", "TICKMODULO", "POSEPARAM", "ALL"
+	};
+
 	ImGui::Columns(2, NULL, true);
 	{
 		ImGui::BeginChild("HVH1", ImVec2(0, 0), true);
@@ -126,8 +130,9 @@ void HvH::RenderTab()
 		{
 			ImGui::Text("Resolver");
 			ImGui::Separator();
-			ImGui::Checkbox("Resolve All", &Settings::Resolver::resolveAll);
-			SetTooltip("Resolves all players on the server");
+			ImGui::Combo("##RESOLVERMODE", (int*)& Settings::Resolver::mode, resolverModes, IM_ARRAYSIZE(resolverModes));
+			ImGui::SliderFloat("##RESOLVERTICKS", &Settings::Resolver::ticks, 0, 16, "Ticks: %0.f");
+			ImGui::SliderFloat("##RESOLVERMODULO", &Settings::Resolver::modulo, 0, 16, "Modulo: %0.f");
 			ImGui::Separator();
 			ImGui::Text("Movement");
 			ImGui::Checkbox("Auto Crouch", &Settings::Aimbot::AutoCrouch::enabled);

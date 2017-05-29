@@ -158,6 +158,17 @@ enum class SpammerType : int
 	SPAMMER_POSITIONS,
 };
 
+enum class ResolverMode : int
+{
+	OFF,
+	FORCE,
+	DELTA,
+	STEADY,
+	TICKMODULO,
+	POSEPARAM,
+	ALL,
+};
+
 struct AimbotWeapon_t
 {
 	bool enabled, silent, pSilent, friendly, closestBone, desiredBones[31], engageLock, engageLockTR;
@@ -553,6 +564,9 @@ namespace Settings
 	namespace Resolver
 	{
 		extern bool resolveAll;
+		extern float ticks;
+		extern float modulo;
+		extern ResolverMode mode;
 	}
 
 	namespace ESP

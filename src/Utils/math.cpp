@@ -79,8 +79,8 @@ void Math::CorrectMovement(QAngle vOldAngles, CUserCmd* pCmd, float fOldForward,
 	deltaView = 360.0f - deltaView;
 
 	pCmd->forwardmove = cos(DEG2RAD(deltaView)) * fOldForward + cos(DEG2RAD(deltaView + 90.f)) * fOldSidemove;
-	//if ((pCmd->viewangles.x > 90 && pCmd->viewangles.x < 270) || (pCmd->viewangles.x < -90 && pCmd->viewangles.x > -270))
-	//    pCmd->forwardmove *= -1;
+	if ((pCmd->viewangles.x > 90 && pCmd->viewangles.x < 270) || (pCmd->viewangles.x < -90 && pCmd->viewangles.x > -270))
+	    pCmd->forwardmove *= -1;
 	pCmd->sidemove = sin(DEG2RAD(deltaView)) * fOldForward + sin(DEG2RAD(deltaView + 90.f)) * fOldSidemove;
 }
 
@@ -138,3 +138,9 @@ QAngle Math::CalcAngle(Vector src, Vector dst)
 	return angles;
 }
 
+float Math::ClampYaw (float val)
+{
+	while (val < 0) val += 360.0f;
+	while (val > 360.0f) val -= 360.0f;
+	return val;
+}
