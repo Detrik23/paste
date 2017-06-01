@@ -31,7 +31,7 @@ namespace UI
 	void SwapWindow();
 	void SetupColors();
 	void SetupWindows();
-	void QuickToggle(bool enable);
+	void QuickToggle();
 	bool ColorPicker(float* col, bool alphabar);
 	bool ColorPicker3(float col[3]);
 	bool ColorPicker4(float col[4]);

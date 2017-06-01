@@ -47,15 +47,15 @@ void SetupMainMenuBar()
 	}
 }
 
-void UI::QuickToggle(bool enable)
+void UI::QuickToggle()
 {
-	QuickMenu::showWindow = enable;
+	QuickMenu::showWindow = !QuickMenu::showWindow;
 }
 
 void UI::SwapWindow()
 {
 	if (UI::isVisible) {
-		Draw::ImDrawText(ImVec2(4.f, 4.f), ImColor(255, 255, 255, 255), "Press Alt for menu", NULL, 0.0f, NULL, ImFontFlags_Shadow);
+		Draw::ImDrawText(ImVec2(4.f, 4.f), ImColor(255, 255, 255, 255), "Right click for the quick menu", NULL, 0.0f, NULL, ImFontFlags_Shadow);
 		return;
 	}
 

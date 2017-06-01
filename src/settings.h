@@ -178,7 +178,7 @@ struct AimbotWeapon_t
 	ButtonCode_t aimkey;
 	bool aimkeyOnly, smoothEnabled, smoothSaltEnabled, errorMarginEnabled, curveEnabled, autoAimEnabled, aimStepEnabled, rcsEnabled, rcsAlwaysOn, spreadLimitEnabled, spreadLimitDistance;
 	float smoothAmount, smoothSaltMultiplier, curveAmount, errorMarginValue, autoAimFov, aimStepValue, rcsAmountX, rcsAmountY, autoWallValue, spreadLimit;
-	bool autoCockRevolver, autoPistolEnabled, autoShootEnabled, autoScopeEnabled, noShootEnabled, ignoreJumpEnabled, smokeCheck, flashCheck, autoWallEnabled, autoWallBones[6], autoAimRealDistance, autoSlow, predEnabled;
+	bool autoCockRevolver, autoPistolEnabled, autoShootEnabled, autoScopeEnabled, noShootEnabled, ignoreJumpEnabled, smokeCheck, flashCheck, autoWallEnabled, autoWallBones[6], autoAimRealDistance, autoSlow, predEnabled, moveMouse;
 
 	AimbotWeapon_t(bool enabled, bool silent, bool pSilent, bool friendly, bool closestBone, bool engageLock, bool engageLockTR, int engageLockTTR, Bone bone, ButtonCode_t aimkey, bool aimkeyOnly,
 		   bool smoothEnabled, float smoothValue, SmoothType smoothType, bool smoothSaltEnabled, float smoothSaltMultiplier,
@@ -190,7 +190,7 @@ struct AimbotWeapon_t
 		   bool noShootEnabled, bool ignoreJumpEnabled, bool smokeCheck, bool flashCheck,
 		   bool spreadLimitEnabled, bool spreadLimitDistance, float spreadLimit,
 		   bool autoWallEnabled, float autoWallValue, bool autoAimRealDistance, bool autoSlow,
-		   bool predEnabled, bool autoWallBones[6] = nullptr)
+		   bool predEnabled, bool moveMouse, bool autoWallBones[6] = nullptr)
 	{
 		this->enabled = enabled;
 		this->silent = silent;
@@ -235,6 +235,7 @@ struct AimbotWeapon_t
 		this->autoWallValue = autoWallValue;
 		this->autoSlow = autoSlow;
 		this->predEnabled = predEnabled;
+		this->moveMouse = moveMouse;
 
 		for (int i = (int) Hitbox::HITBOX_HEAD; i <= (int) Hitbox::HITBOX_ARMS; i++)
 			this->autoWallBones[i] = autoWallBones != nullptr ? autoWallBones[i] : false;
@@ -377,6 +378,7 @@ namespace Settings
 		extern Bone bone;
 		extern ButtonCode_t aimkey;
 		extern bool aimkeyOnly;
+		extern bool moveMouse;
 
 		namespace Smooth
 		{

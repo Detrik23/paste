@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project(AimTux)
+project(AyyTux)
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 5.2)
@@ -48,4 +48,4 @@ add_definitions(-DLUA)
 include_directories(${INCLUDE_DIRS})
 
 add_library(AyyTux SHARED ${SOURCE_FILES})
-target_link_libraries(AyyTux SDL2 GL dl ${LUA_LIBRARY})
+target_link_libraries(AyyTux SDL2 GL dl xdo ${LUA_LIBRARY})

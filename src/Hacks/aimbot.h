@@ -6,6 +6,11 @@
 #include "../Utils/entity.h"
 #include "../Utils/math.h"
 
+extern "C"
+{
+	#include <xdo.h>
+}
+
 namespace Aimbot
 {
 	extern bool aimStepInProgress;
@@ -27,4 +32,6 @@ namespace Aimbot
 	void CreateMove(CUserCmd* cmd);
 	void FireGameEvent(IGameEvent* event);
 	void UpdateValues();
+
+	void XDOCleanup();
 }

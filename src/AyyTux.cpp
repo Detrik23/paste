@@ -111,6 +111,7 @@ void __attribute__((destructor)) AyyTuxShutdown()
 	cvar->FindVar("cl_mouseenable")->SetValue(1);
 
 	AntiAim::LuaCleanup();
+	Aimbot::XDOCleanup();
 
 	SDL2::UnhookWindow();
 	SDL2::UnhookPollEvent();
