@@ -172,13 +172,13 @@ enum class ResolverMode : int
 struct AimbotWeapon_t
 {
 	bool enabled, silent, pSilent, friendly, closestBone, desiredBones[31], engageLock, engageLockTR;
-	int engageLockTTR;
+	int engageLockTTR, hitChanceRays;
 	Bone bone;
 	SmoothType smoothType;
 	ButtonCode_t aimkey;
 	bool aimkeyOnly, smoothEnabled, smoothSaltEnabled, errorMarginEnabled, curveEnabled, autoAimEnabled, aimStepEnabled, rcsEnabled, rcsAlwaysOn, spreadLimitEnabled, spreadLimitDistance;
-	float smoothAmount, smoothSaltMultiplier, curveAmount, errorMarginValue, autoAimFov, aimStepValue, rcsAmountX, rcsAmountY, autoWallValue, spreadLimit;
-	bool autoCockRevolver, autoPistolEnabled, autoShootEnabled, autoScopeEnabled, noShootEnabled, ignoreJumpEnabled, smokeCheck, flashCheck, autoWallEnabled, autoWallBones[6], autoAimRealDistance, autoSlow, predEnabled, moveMouse;
+	float smoothAmount, smoothSaltMultiplier, curveAmount, errorMarginValue, autoAimFov, aimStepValue, rcsAmountX, rcsAmountY, autoWallValue, spreadLimit, hitChanceValue;
+	bool autoCockRevolver, autoPistolEnabled, autoShootEnabled, autoScopeEnabled, noShootEnabled, ignoreJumpEnabled, smokeCheck, flashCheck, autoWallEnabled, autoWallBones[6], autoAimRealDistance, autoSlow, predEnabled, moveMouse, hitChanceEnabled;
 
 	AimbotWeapon_t(bool enabled, bool silent, bool pSilent, bool friendly, bool closestBone, bool engageLock, bool engageLockTR, int engageLockTTR, Bone bone, ButtonCode_t aimkey, bool aimkeyOnly,
 		   bool smoothEnabled, float smoothValue, SmoothType smoothType, bool smoothSaltEnabled, float smoothSaltMultiplier,
@@ -190,7 +190,7 @@ struct AimbotWeapon_t
 		   bool noShootEnabled, bool ignoreJumpEnabled, bool smokeCheck, bool flashCheck,
 		   bool spreadLimitEnabled, bool spreadLimitDistance, float spreadLimit,
 		   bool autoWallEnabled, float autoWallValue, bool autoAimRealDistance, bool autoSlow,
-		   bool predEnabled, bool moveMouse, bool autoWallBones[6] = nullptr)
+		   bool predEnabled, bool moveMouse, bool hitChanceEnabled, int hitChanceRays, float hitChanceValue, bool autoWallBones[6] = nullptr)
 	{
 		this->enabled = enabled;
 		this->silent = silent;
@@ -236,6 +236,9 @@ struct AimbotWeapon_t
 		this->autoSlow = autoSlow;
 		this->predEnabled = predEnabled;
 		this->moveMouse = moveMouse;
+		this->hitChanceEnabled = hitChanceEnabled;
+		this->hitChanceRays = hitChanceRays;
+		this->hitChanceValue = hitChanceValue;
 
 		for (int i = (int) Hitbox::HITBOX_HEAD; i <= (int) Hitbox::HITBOX_ARMS; i++)
 			this->autoWallBones[i] = autoWallBones != nullptr ? autoWallBones[i] : false;
@@ -301,7 +304,10 @@ struct AimbotWeapon_t
 			this->autoWallValue == another.autoWallValue &&
 			this->autoSlow == another.autoSlow &&
 			this->predEnabled == another.predEnabled &&
-			this->autoAimRealDistance == another.autoAimRealDistance;
+			this->autoAimRealDistance == another.autoAimRealDistance &&
+			this->hitChanceEnabled == another.hitChanceEnabled &&
+			this->hitChanceRays == another.hitChanceRays &&
+			this->hitChanceValue == another.hitChanceValue;
 	}
 };
 
@@ -490,6 +496,13 @@ namespace Settings
 		{
 			extern bool enabled;
 			extern bool distanceBased;
+			extern float value;
+		}
+
+		namespace HitChance
+		{
+			extern bool enabled;
+			extern int hitRays;
 			extern float value;
 		}
 

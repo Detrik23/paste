@@ -56,6 +56,9 @@ bool Settings::Aimbot::AutoSlow::enabled = false;
 bool Settings::Aimbot::AutoSlow::goingToSlow = false;
 bool Settings::Aimbot::Prediction::enabled = false;
 bool Settings::Aimbot::AutoCockRevolver::enabled = false;
+bool Settings::Aimbot::HitChance::enabled = false;
+int Settings::Aimbot::HitChance::hitRays = 100;
+float Settings::Aimbot::HitChance::value = 0.5f;
 
 bool Aimbot::aimStepInProgress = false;
 std::vector<int64_t> Aimbot::friends = { };
@@ -66,6 +69,7 @@ bool Settings::Aimbot::moveMouse = false;
 bool shouldAim;
 QAngle AimStepLastAngle;
 QAngle RCSLastPunch;
+
 
 static xdo_t *xdo = xdo_new(NULL);
 
@@ -81,7 +85,7 @@ std::unordered_map<Hitbox, std::vector<const char*>, Util::IntHash<Hitbox>> hitb
 };
 
 std::unordered_map<ItemDefinitionIndex, AimbotWeapon_t, Util::IntHash<ItemDefinitionIndex>> Settings::Aimbot::weapons = {
-		{ ItemDefinitionIndex::INVALID, { false, false, false, false, false, false, false, 700, Bone::BONE_HEAD, ButtonCode_t::MOUSE_MIDDLE, false, false, 1.0f, SmoothType::SLOW_END, false, 0.0f, false, 0.0f, false, 0.5f, true, 180.0f, false, 25.0f, false, false, 2.0f, 2.0f, false, false, false, false, false, false, false, false, false, false, 0.1f, false, 10.0f, false, false, 5.0f, false } },
+		{ ItemDefinitionIndex::INVALID, { false, false, false, false, false, false, false, 700, Bone::BONE_HEAD, ButtonCode_t::MOUSE_MIDDLE, false, false, 1.0f, SmoothType::SLOW_END, false, 0.0f, false, 0.0f, false, 0.5f, true, 180.0f, false, 25.0f, false, false, 2.0f, 2.0f, false, false, false, false, false, false, false, false, false, false, 0.1f, false, 10.0f, false, false, 5.0f, false, false, 100, 0.5f } },
 };
 
 static QAngle ApplyErrorToAngle(QAngle* angles, float margin)
@@ -100,6 +104,44 @@ static inline void ApplyOffsetToAngle(QAngle *angles, QAngle *offset)
 void Aimbot::XDOCleanup()
 {
 	xdo_free(xdo);
+}
+
+bool Aimbot::HitChance(const Vector& point, bool teamCheck, C_BasePlayer* localplayer)
+{
+	if (!Settings::Aimbot::HitChance::enabled)
+		return true;
+	
+	int hitCount = 0;
+	for (int i = 0; i < Settings::Aimbot::HitChance::hitRays; i++) {
+		Vector dst = point;
+		Autowall::FireBulletData data;
+		data.src = localplayer->GetEyePosition();
+		data.filter.pSkip = localplayer;
+	
+		C_BaseCombatWeapon* activeWeapon = (C_BaseCombatWeapon*) entityList->GetClientEntityFromHandle(localplayer->GetActiveWeapon());
+		if (!activeWeapon)
+			return false;
+
+		float a = (float)M_PI * 2.0f * ((float)(rand() % 1000)/1000.0f);
+		float b = activeWeapon->GetSpread() * ((float)(rand() % 1000)/1000.0f) * 90.0f;
+		float c = (float)M_PI * 2.0f * ((float)(rand() % 1000)/1000.0f);
+		float d = activeWeapon->GetInaccuracy() * ((float)(rand() % 1000)/1000.0f) * 90.0f;
+
+		QAngle angles = Math::CalcAngle(data.src, dst);
+		angles.x += (cos(a) * b) + (cos(c) * d);
+		angles.y += (sin(a) * b) + (sin(c) * d);
+		Math::AngleVectors(angles, data.direction);
+	
+		data.direction.NormalizeInPlace();
+	
+		if (Autowall::SimulateFireBullet(activeWeapon, teamCheck, data))
+			hitCount++;
+	}
+
+	cvar->ConsoleDPrintf("HitCount: %d/%d - %f\n", hitCount, Settings::Aimbot::HitChance::hitRays, Settings::Aimbot::HitChance::value);
+
+
+	return ((float)hitCount/(float)Settings::Aimbot::HitChance::hitRays > Settings::Aimbot::HitChance::value);
 }
 
 float AutoWallBestBone(C_BasePlayer *player, int &bestBone)
@@ -619,7 +661,7 @@ float GetDistanceForward (C_BasePlayer* player, QAngle angles, CUserCmd* cmd)
 	return cbrt( (dX * dX) + (dY * dY) + (dZ * dZ));
 }
 
-void Aimbot::AutoShoot(C_BasePlayer* player, C_BaseCombatWeapon* activeWeapon, CUserCmd* cmd)
+void Aimbot::AutoShoot(C_BasePlayer* player, int bone, C_BaseCombatWeapon* activeWeapon, CUserCmd* cmd)
 {
 	if (!Settings::Aimbot::AutoShoot::enabled)
 		return;
@@ -646,6 +688,8 @@ void Aimbot::AutoShoot(C_BasePlayer* player, C_BaseCombatWeapon* activeWeapon, C
 	if( Settings::Aimbot::SpreadLimit::enabled && ((activeWeapon->GetSpread() + activeWeapon->GetInaccuracy()) > spreadValue))
 		return;
 
+	if (Settings::Aimbot::HitChance::enabled && !Aimbot::HitChance(player->GetBonePosition(bone), !Settings::Aimbot::friendly, localplayer))
+		return;
 	
 	if( Settings::Aimbot::AutoShoot::velocityCheck && localplayer->GetVelocity().Length() > (activeWeapon->GetCSWpnData()->GetMaxPlayerSpeed() / 3) )
 		return;
@@ -695,8 +739,6 @@ void Aimbot::ShootCheck(C_BaseCombatWeapon* activeWeapon, CUserCmd* cmd)
 
 void Aimbot::NoShoot(C_BaseCombatWeapon* activeWeapon, C_BasePlayer* player, CUserCmd* cmd)
 {
-	if (activeWeapon->GetSpread() + activeWeapon->GetInaccuracy() < 0.03f)
-		return;
 	if (player && Settings::Aimbot::NoShoot::enabled)
 	{
 		if (*activeWeapon->GetItemDefinitionIndex() == ItemDefinitionIndex::WEAPON_C4)
@@ -832,7 +874,7 @@ void Aimbot::CreateMove(CUserCmd* cmd)
 	Aimbot::AutoSlow(player, oldForward, oldSideMove, bestDamage, activeWeapon, cmd);
 	Aimbot::AutoPistol(activeWeapon, cmd);
 	Aimbot::AutoCockRevolver(activeWeapon, player, cmd);
-	Aimbot::AutoShoot(player, activeWeapon, cmd);
+	Aimbot::AutoShoot(player, aw_bone, activeWeapon, cmd);
 	Aimbot::RCS(angle, player, cmd);
 	Aimbot::Smooth(player, angle, cmd);
 	Aimbot::ShootCheck(activeWeapon, cmd);
@@ -950,6 +992,9 @@ void Aimbot::UpdateValues()
 	Settings::Aimbot::AutoWall::enabled = currentWeaponSetting.autoWallEnabled;
 	Settings::Aimbot::AutoWall::value = currentWeaponSetting.autoWallValue;
 	Settings::Aimbot::AutoSlow::enabled = currentWeaponSetting.autoSlow;
+	Settings::Aimbot::HitChance::value = currentWeaponSetting.hitChanceValue;
+	Settings::Aimbot::HitChance::hitRays = currentWeaponSetting.hitChanceRays;
+	Settings::Aimbot::HitChance::enabled = currentWeaponSetting.hitChanceEnabled;
 
 	for (int i = (int) Hitbox::HITBOX_HEAD; i <= (int) Hitbox::HITBOX_ARMS; i++)
 		Settings::Aimbot::AutoWall::bones[i] = currentWeaponSetting.autoWallBones[i];

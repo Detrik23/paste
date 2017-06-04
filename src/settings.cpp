@@ -189,6 +189,9 @@ void Settings::LoadDefaultsOrSave(std::string path)
 		weaponSetting["AutoSlow"]["enabled"] = i.second.autoSlow;
 		weaponSetting["Prediction"]["enabled"] = i.second.predEnabled;
 		weaponSetting["moveMouse"] = i.second.moveMouse;
+		weaponSetting["HitChance"]["enabled"] = i.second.hitChanceEnabled;
+		weaponSetting["HitChance"]["hitRays"] = i.second.hitChanceRays;
+		weaponSetting["HitChance"]["value"] = i.second.hitChanceValue;
 
 		for (int bone = (int) Hitbox::HITBOX_HEAD; bone <= (int) Hitbox::HITBOX_ARMS; bone++)
 			weaponSetting["AutoWall"]["Bones"][bone] = i.second.autoWallBones[bone];
@@ -552,7 +555,7 @@ void Settings::LoadConfig(std::string path)
 	Fonts::SetupFonts();
 
 	Settings::Aimbot::weapons = {
-			{ ItemDefinitionIndex::INVALID, { false, false, false, false, false, false, false, 700, Bone::BONE_HEAD, ButtonCode_t::MOUSE_MIDDLE, false, false, 1.0f, SmoothType::SLOW_END, false, 0.0f, false, 0.0f, false, 0.0f, true, 180.0f, false, 25.0f, false, false, 2.0f, 2.0f, false, false, false, false, false, false, false, false, false, false, 0.1f, false, 10.0f, false, false, 5.0f, false } },
+			{ ItemDefinitionIndex::INVALID, { false, false, false, false, false, false, false, 700, Bone::BONE_HEAD, ButtonCode_t::MOUSE_MIDDLE, false, false, 1.0f, SmoothType::SLOW_END, false, 0.0f, false, 0.0f, false, 0.0f, true, 180.0f, false, 25.0f, false, false, 2.0f, 2.0f, false, false, false, false, false, false, false, false, false, false, 0.1f, false, 10.0f, false, false, 5.0f, false, false, 100, 0.5f } },
 	};
 
 	for (Json::ValueIterator itr = settings["Aimbot"]["weapons"].begin(); itr != settings["Aimbot"]["weapons"].end(); itr++)
@@ -620,7 +623,10 @@ void Settings::LoadConfig(std::string path)
 				weaponSetting["AutoAim"]["RealDistance"].asBool(),
 				weaponSetting["AutoSlow"]["enabled"].asBool(),
 				weaponSetting["Prediction"]["enabled"].asBool(),
-				weaponSetting["moveMouse"].asBool()
+				weaponSetting["moveMouse"].asBool(),
+				weaponSetting["HitChance"]["enabled"].asBool(),
+				weaponSetting["HitChance"]["hitRays"].asInt(),
+				weaponSetting["HitChance"]["value"].asFloat()
 		};
 
 		for (int bone = (int) Hitbox::HITBOX_HEAD; bone <= (int) Hitbox::HITBOX_ARMS; bone++)
