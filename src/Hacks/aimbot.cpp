@@ -138,7 +138,7 @@ bool Aimbot::HitChance(const Vector& point, bool teamCheck, C_BasePlayer* localp
 			hitCount++;
 	}
 
-	cvar->ConsoleDPrintf("HitCount: %d/%d - %f\n", hitCount, Settings::Aimbot::HitChance::hitRays, Settings::Aimbot::HitChance::value);
+	//cvar->ConsoleDPrintf("HitCount: %d/%d - %f\n", hitCount, Settings::Aimbot::HitChance::hitRays, Settings::Aimbot::HitChance::value);
 
 
 	return ((float)hitCount/(float)Settings::Aimbot::HitChance::hitRays > Settings::Aimbot::HitChance::value);
