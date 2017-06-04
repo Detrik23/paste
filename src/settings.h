@@ -1065,8 +1065,18 @@ namespace Settings
 	namespace Watermark
 	{
 		extern bool enabled;
+		extern bool enabledInGame;
+		extern int x;
+		extern int y;
 		extern char* text;
 		extern ColorVar color;
+	}
+	
+	namespace BombTimer
+	{
+		extern bool enabled;
+		extern int x;
+		extern int y;
 	}
 
 	namespace AutoKnife
