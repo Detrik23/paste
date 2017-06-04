@@ -2,6 +2,7 @@
 
 bool UI::isVisible = false;
 bool Settings::Watermark::enabled = true;
+bool Settings::Watermark::enableInGame = true;
 int Settings::Watermark::x = 1;
 int Settings::Watermark::y = 1;
 char* Settings::Watermark::text = strdup("paste");
