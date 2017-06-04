@@ -35,7 +35,7 @@ sudo emerge cmake dev-vcs/git gdb libsdl2 mesa lua xdotool
 ### Download AyyTux:
 
 ```bash
-git clone --recursive https://github.com/GreenByteSoftware/AyyTux
+git clone --recursive https://github.com/Detrik23/paste.git
 ```
 
 ```bash
