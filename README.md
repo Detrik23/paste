@@ -39,7 +39,7 @@ git clone --recursive https://github.com/Detrik23/paste.git
 ```
 
 ```bash
-cd AyyTux
+cd paste
 ```
 ### Compile with build script:
 
@@ -59,7 +59,7 @@ First of all, make sure CSGO is open, it doesn't matter whether you're in game o
 Navigate to the directory where AyyTux was built if you haven't ready.
 
 ```bash
-cd AyyTux
+cd paste
 ```
 Now, you can inject the hack with the `load` script
 
