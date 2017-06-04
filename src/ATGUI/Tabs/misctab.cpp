@@ -4,6 +4,11 @@ static char nickname[127] = "";
 
 void Misc::RenderTab()
 {
+	int width, height;
+	engine->GetScreenSize(width, height);
+	width = width/4;
+	height = height/4;
+
 	const char* strafeTypes[] = { "Forwards", "Backwards", "Left", "Right", "Rage" };
 	const char* animationTypes[] = { "Static", "Marquee", "Words", "Letters" };
 	const char* spammerTypes[] = { "None", "Normal", "Positions" };
@@ -315,6 +320,64 @@ void Misc::RenderTab()
 			}
 			ImGui::Columns(1);
 			ImGui::Separator();
+			ImGui::Text("On-screen display");
+			ImGui::Separator();
+			ImGui::Columns(2, NULL, true);
+			{
+				ImGui::Checkbox("Watermark", &Settings::Watermark::enabled);
+				SetTooltip("Enable/Disable the watermark");
+				ImGui::Checkbox("Show always", &Settings::Watermark::enableInGame);
+				SetTooltip("Shows the watermark ingame");
+			}
+			ImGui::NextColumn();
+			{
+				ImGui::PushItemWidth(-1);
+				ImGui::InputText("##WATERMARK", Settings::Watermark::text, 63);
+				ImGui::PopItemWidth();
+				if (ImGui::Button("Watermark Position", ImVec2(-1, 0)))
+					ImGui::OpenPopup("positionWatermark");
+				SetTooltip("Change the coordiantes of the Watermark");
+				ImGui::SetNextWindowSize(ImVec2(200, 70), ImGuiSetCond_Always);
+
+				if (ImGui::BeginPopup("positionWatermark"))
+				{
+					ImGui::PushItemWidth(-1);
+					ImGui::SliderInt("##WATERMARKX", &Settings::Watermark::x, 1, width, "X: %0.f");
+					SetTooltip("Tip: Use Crtl+Click for precise input");
+					ImGui::PopItemWidth();
+					ImGui::PushItemWidth(-1);
+					ImGui::SliderInt("##WATERMARKY", &Settings::Watermark::y, 1, height, "Y: %0.f");
+					ImGui::PopItemWidth();
+					ImGui::EndPopup();
+				}
+				ImGui::PopItemWidth();
+			}
+			ImGui::Separator();
+			ImGui::Columns(2, NULL, true);
+			{
+				ImGui::Checkbox("Bomb Timer", &Settings::BombTimer::enabled);
+				SetTooltip("Show the remaining time till explosion in the top left corner");
+			}
+			ImGui::NextColumn();
+			{
+				if (ImGui::Button("Bomb Timer Position", ImVec2(-1, 0)))
+					ImGui::OpenPopup("positionBombTimer");
+				SetTooltip("Change the coordiantes of the Bomb Timer");
+				ImGui::SetNextWindowSize(ImVec2(200, 70), ImGuiSetCond_Always);
+
+				if (ImGui::BeginPopup("positionBombTimer"))
+				{
+					ImGui::PushItemWidth(-1);
+					ImGui::SliderInt("##BOMBTIMERX", &Settings::BombTimer::x, 1, width, "X: %0.f");
+					SetTooltip("Tip: Use Crtl+Click for precise input");
+					ImGui::PopItemWidth();
+					ImGui::PushItemWidth(-1);
+					ImGui::SliderInt("##BOMBTIMERY", &Settings::BombTimer::y, 1, height, "Y: %0.f");
+					ImGui::PopItemWidth();
+					ImGui::EndPopup();
+				}
+				ImGui::PopItemWidth();
+			}
 			ImGui::EndChild();
 		}
 	}
@@ -410,17 +473,15 @@ void Misc::RenderTab()
 				ImGui::Checkbox("Auto Accept", &Settings::AutoAccept::enabled);
 				SetTooltip("Auto accept games when in MM queue");
 				ImGui::Checkbox("AirStuck", &Settings::Airstuck::enabled);
-				SetTooltip("Stops tickrate so you freeze in place, or move slow");
-				ImGui::Checkbox("No Key Stuck", &Settings::Airstuck::alwaysOn);
-				SetTooltip("Airstuck without pressing a key");
+				SetTooltip("Stops tickrate so you freeze in place");
 				ImGui::Checkbox("Autoblock", &Settings::Autoblock::enabled);
 				SetTooltip("Allows you to block players from moving forwards by standing in front of them and mirroring their moves - great for griefing");
 				ImGui::Checkbox("Jump Throw", &Settings::JumpThrow::enabled);
 				SetTooltip("Hold to prime grenade, release to perform perfect jump throw. Good for executing map smokes.");
 				ImGui::Checkbox("Auto Defuse", &Settings::AutoDefuse::enabled);
-				SetTooltip("Will automatically defuse the bomb with 0.5 seconds remaining - starts at 5.5 seconds until explosion with kit and 10.5 without");
-				ImGui::Checkbox("Watermark", &Settings::Watermark::enabled);
-				SetTooltip("Enable/Disable the Watermark");
+				SetTooltip("Will automatically defuse the bomb with the given time remaining");
+				ImGui::Checkbox("Silent Defuse", &Settings::AutoDefuse::silent);
+				SetTooltip("Will defuse the bomb with no need to look at it");
 				ImGui::Checkbox("Sniper Crosshair", &Settings::SniperCrosshair::enabled);
 				SetTooltip("Enables the crosshair with sniper rifles");
 				ImGui::Checkbox("Disable post-processing", &Settings::DisablePostProcessing::enabled);
@@ -434,24 +495,13 @@ void Misc::RenderTab()
 				ImGui::Checkbox("Show Ranks", &Settings::ShowRanks::enabled);
 				SetTooltip("Displays competitive rank of all players in the scoreboard next to their name during a competitive match");
 				ImGui::Checkbox("Screenshot Cleaner", &Settings::ScreenshotCleaner::enabled);
-				SetTooltip("Prevents Cheat visuals from appearing in screenshots taken");
+				SetTooltip("Prevents Antario visuals from appearing in screenshots taken");
 				UI::KeyBindButton(&Settings::Airstuck::key);
-				ImGui::SliderInt("##AIRSTUCKSPEED", &Settings::Airstuck::moveSpeed, 0, 10, "Speed: %0.f");
 				UI::KeyBindButton(&Settings::Autoblock::key);
 				UI::KeyBindButton(&Settings::JumpThrow::key);
-				ImGui::Checkbox("Silent Defuse", &Settings::AutoDefuse::silent);
-				SetTooltip("Will defuse the bomb with no need to look at it");
-				if (ImGui::Button("Custom###WMCUSTOM"))
-					ImGui::OpenPopup("customwm");
-
-				ImGui::SetNextWindowSize(ImVec2(565, 40), ImGuiSetCond_Always);
-				if (ImGui::BeginPopup("customwm"))
-				{
-					ImGui::PushItemWidth(550);
-						ImGui::InputText("", Settings::Watermark::text, 127);
-					ImGui::PopItemWidth();
-					ImGui::EndPopup();
-				}
+				ImGui::PushItemWidth(-1);
+				ImGui::SliderFloat("##DEFTIME", &Settings::AutoDefuse::time, 0.05, 5, "Time: %0.3f");
+				ImGui::PopItemWidth();
 			}
 			ImGui::Columns(1);
 			ImGui::Separator();
