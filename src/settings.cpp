@@ -508,9 +508,16 @@ void Settings::LoadDefaultsOrSave(std::string path)
 	settings["WalkBot"]["autobuy"] = Settings::WalkBot::autobuy;
 	settings["WalkBot"]["autobuyAt"] = Settings::WalkBot::autobuyAt;
 
-	settings["Watermark"]["enabled"] = Settings::Watermark::enabled;
+ 	settings["Watermark"]["enabled"] = Settings::Watermark::enabled;
+ 	settings["Watermark"]["enableInGame"] = Settings::Watermark::enableInGame;
+ 	settings["Watermark"]["x"] = Settings::Watermark::x;
+	settings["Watermark"]["y"] = Settings::Watermark::y;
 	settings["Watermark"]["text"] = Settings::Watermark::text;
 	LoadColor(settings["Watermark"]["color"], Settings::Watermark::color);
+
+	settings["BombTimer"]["enabled"] = Settings::BombTimer::enabled;
+	settings["BombTimer"]["x"] = Settings::BombTimer::x;
+	settings["BombTimer"]["y"] = Settings::BombTimer::y;
 
 	settings["GrenadeHelper"]["enabled"] = Settings::GrenadeHelper::enabled;
 	settings["GrenadeHelper"]["aimAssist"] = Settings::GrenadeHelper::aimAssist;
