@@ -2,14 +2,14 @@
 
 bool UI::isVisible = false;
 bool Settings::Watermark::enabled = true;
-char* Settings::Watermark::text = strdup("AyyTux");
+char* Settings::Watermark::text = strdup("paste");
 ColorVar Settings::Watermark::color = ImColor(255, 255, 255, 255);
 
 bool Settings::ScreenshotCleaner::enabled = false;
 
-ColorVar Settings::UI::mainColor = ImColor(0, 218, 70, 156);
-ColorVar Settings::UI::bodyColor = ImColor(5, 24, 32, 238);
-ColorVar Settings::UI::fontColor = ImColor(0, 254, 219, 255);
+ColorVar Settings::UI::mainColor = ImColor(25, 25, 25, 255);
+ColorVar Settings::UI::bodyColor = ImColor(5, 5, 5, 255);
+ColorVar Settings::UI::fontColor = ImColor(255, 255, 255, 255);
 
 #define IM_ARRAYSIZE(_ARR)  ((int)(sizeof(_ARR)/sizeof(*_ARR)))
 
