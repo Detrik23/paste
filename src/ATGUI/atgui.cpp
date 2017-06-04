@@ -2,8 +2,14 @@
 
 bool UI::isVisible = false;
 bool Settings::Watermark::enabled = true;
+bool Settings::Watermakr::enabledInGame = true;
+int Settings::Watermark::x = 1;
+int Settings::Watermark::y = 1;
 char* Settings::Watermark::text = strdup("paste");
 ColorVar Settings::Watermark::color = ImColor(255, 255, 255, 255);
+bool Settings::BombTimer::enabled = true;
+int Settings::BombTimer::x = 1;
+int Settings::BombTimer::y = 4;
 
 bool Settings::ScreenshotCleaner::enabled = false;
 
@@ -61,9 +67,23 @@ void UI::SwapWindow()
 
 	if (engine->IsInGame())
 		return;
+	
+	if (Settings::BombTimer::enabled)
+	{
+		ESP::DisplayBombInfo(Settings::BombTimer::x, Settings::BombTimer::y);
+	}
 
 	if (Settings::Watermark::enabled)
-		Draw::ImDrawText(ImVec2(4.f, 4.f), Settings::Watermark::color.Color(), Settings::Watermark::text, NULL, 0.0f, NULL, ImFontFlags_Outline);
+	{
+		if (engine->IsInGame() && !Settings::Watermark::enableInGame)
+		{
+			return;
+		}
+		else
+		{
+			float xcord = Settings::Watermark::x * 4.f;
+			float ycord = Settings::Watermark::y * 4.f;
+			Draw::ImDrawText(ImVec2(xcord, ycord), Settings::Watermark::color.Color(), Settings::Watermark::text, NULL, 0.0f, NULL, ImFontFlags_Outline);
 }
 
 void UI::SetVisible(bool visible)
