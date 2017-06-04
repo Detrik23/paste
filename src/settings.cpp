@@ -1019,6 +1019,8 @@ void Settings::LoadConfig(std::string path)
 	GetVal(settings["Watermark"]["text"], &Settings::Watermark::text);
 	GetVal(settings["Watermark"]["color"], &Settings::Watermark::color);
 	
+	GetVal(settings["BombTimer"]["enabled"], &Settings::BombTimer::enabled);
+	
 	GetVal(settings["AutoKnife"]["enabled"], &Settings::AutoKnife::enabled);
 	GetVal(settings["AutoKnife"]["Filters"]["enemies"], &Settings::AutoKnife::Filters::enemies);
 	GetVal(settings["AutoKnife"]["Filters"]["allies"], &Settings::AutoKnife::Filters::allies);
